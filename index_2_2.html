@@ -1,0 +1,1686 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<title>Wedding Program</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,500&family=Pretendard:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --ivory:#FAF6EF;
+    --ink:#2B2620;
+    --gold:#A6824F;
+    --gold-soft:#E4D4B8;
+    --rose:#C98B7E;
+    --sage:#8A9A7E;        /* 포인트 컬러: 세이지 그린 */
+    --sage-deep:#5F6E55;   /* 세이지 그린 진한 톤 (텍스트/hover용) */
+    --sage-soft:#E4E9DD;   /* 세이지 그린 연한 톤 (배경용) */
+    --line:#D8CDB8;
+  }
+  html{ overflow-x:hidden; -webkit-text-size-adjust:100%; }
+  *{box-sizing:border-box; -webkit-tap-highlight-color:transparent; }
+  body{
+    margin:0;
+    min-height:100vh;
+    min-height:100dvh; /* 모바일 브라우저 주소창 변화에 대응 (dynamic viewport height) */
+    overflow-x:hidden;
+    background:
+      url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Cg fill='none' stroke='%238A9A7E' stroke-width='1.1' stroke-linecap='round' opacity='0.4'%3E%3Cpath d='M18 185 C28 155 20 122 34 92 C42 74 54 62 64 46'/%3E%3Cellipse cx='28' cy='140' rx='10' ry='4.5' transform='rotate(-38 28 140)'/%3E%3Cellipse cx='34' cy='112' rx='10' ry='4.5' transform='rotate(-22 34 112)'/%3E%3Cellipse cx='44' cy='86' rx='9' ry='4' transform='rotate(6 44 86)'/%3E%3Cellipse cx='54' cy='64' rx='8' ry='3.5' transform='rotate(28 54 64)'/%3E%3Cellipse cx='62' cy='48' rx='6' ry='3' transform='rotate(46 62 48)'/%3E%3Cpath d='M182 15 C172 45 180 78 166 108 C158 126 146 138 136 154'/%3E%3Cellipse cx='172' cy='60' rx='10' ry='4.5' transform='rotate(38 172 60)'/%3E%3Cellipse cx='166' cy='88' rx='10' ry='4.5' transform='rotate(22 166 88)'/%3E%3Cellipse cx='156' cy='114' rx='9' ry='4' transform='rotate(-6 156 114)'/%3E%3Cellipse cx='146' cy='136' rx='8' ry='3.5' transform='rotate(-28 146 136)'/%3E%3Cellipse cx='138' cy='152' rx='6' ry='3' transform='rotate(-46 138 152)'/%3E%3C/g%3E%3C/svg%3E") repeat,
+      radial-gradient(circle at 50% 0%, #FFFDF8 0%, var(--ivory) 55%, #F3ECDE 100%);
+    background-size: 220px 220px, cover;
+    font-family:'Pretendard', -apple-system, sans-serif;
+    color:var(--ink);
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    padding:48px 20px 80px;
+  }
+  button{ touch-action:manipulation; } /* 더블탭 확대 지연 방지 */
+  .view{ width:100%; display:flex; flex-direction:column; align-items:center; transition:opacity .28s ease, transform .28s ease; }
+  .view.view-fade-out{ opacity:0; transform:translateY(8px); }
+  .view.view-fade-in{ opacity:0; transform:translateY(8px); }
+
+  .ornament{
+    width:1px;
+    height:40px;
+    background:linear-gradient(var(--gold), transparent);
+    margin-bottom:18px;
+  }
+  .eyebrow{
+    font-size:11px;
+    letter-spacing:0.35em;
+    text-transform:uppercase;
+    color:var(--gold);
+    margin-bottom:14px;
+  }
+  h1{
+    font-family:'Cormorant Garamond', serif;
+    font-weight:600;
+    font-size:42px;
+    margin:0 0 6px;
+    text-align:center;
+    letter-spacing:0.02em;
+  }
+  .sub{
+    font-size:14px;
+    color:#7a7263;
+    margin-bottom:40px;
+    text-align:center;
+    line-height:1.6;
+  }
+  .search-wrap{
+    width:100%;
+    max-width:380px;
+    position:relative;
+  }
+  input#q{
+    width:100%;
+    font-family:'Pretendard', sans-serif;
+    font-size:18px;
+    padding:18px 20px;
+    border:1px solid var(--line);
+    border-radius:2px;
+    background:#fff;
+    outline:none;
+    text-align:center;
+    letter-spacing:0.02em;
+    transition:border-color .25s, box-shadow .25s;
+  }
+  input#q:focus{
+    border-color:var(--gold);
+    box-shadow:0 0 0 3px rgba(166,130,79,0.12);
+  }
+  input#q::placeholder{color:#bdb29a;}
+
+  #results{
+    width:100%;
+    max-width:380px;
+    margin-top:28px;
+  }
+
+  .hint{
+    text-align:center;
+    color:#a39c8a;
+    font-size:13px;
+    margin-top:18px;
+    letter-spacing:0.02em;
+  }
+
+  .card{
+    position:relative;
+    background:#fff;
+    border:1px solid var(--line);
+    padding:38px 28px 32px;
+    margin-bottom:16px;
+    text-align:center;
+    animation:rise .45s ease both;
+    overflow:hidden;
+  }
+  .card::before{
+    content:"";
+    position:absolute;
+    top:0;left:0;right:0;
+    height:3px;
+    background:linear-gradient(90deg, var(--gold-soft), var(--gold), var(--rose));
+  }
+  @keyframes rise{
+    from{opacity:0; transform:translateY(10px);}
+    to{opacity:1; transform:translateY(0);}
+  }
+  .card-name{
+    font-family:'Cormorant Garamond', serif;
+    font-size:24px;
+    font-style:italic;
+    color:#6b5e45;
+    margin-bottom:18px;
+  }
+  .card-label{
+    font-size:11px;
+    letter-spacing:0.3em;
+    text-transform:uppercase;
+    color:var(--gold);
+    margin-bottom:10px;
+  }
+  .card-table{
+    font-family:'Cormorant Garamond', serif;
+    font-size:54px;
+    font-weight:600;
+    line-height:1;
+    color:var(--ink);
+    margin-bottom:4px;
+  }
+  .card-table span{
+    font-size:22px;
+    font-weight:500;
+    color:#8a8170;
+    margin-left:6px;
+  }
+
+  .card.selectable{
+    cursor:pointer;
+    transition:transform .15s, box-shadow .15s;
+  }
+  .card.selectable:hover{
+    transform:translateY(-2px);
+    box-shadow:0 6px 18px rgba(0,0,0,0.08);
+  }
+  .card.selectable:active{
+    transform:translateY(0);
+  }
+  .no-result{
+    text-align:center;
+    color:#9c9181;
+    font-size:14px;
+    padding:30px 10px;
+    line-height:1.7;
+  }
+
+  .back-btn{
+    display:block;
+    margin:6px auto 0;
+    background:none;
+    border:none;
+    color:#a39c8a;
+    font-family:'Pretendard', sans-serif;
+    font-size:12.5px;
+    letter-spacing:0.02em;
+    padding:6px 10px;
+    cursor:pointer;
+    transition:color .2s;
+  }
+  .back-btn:hover{
+    color:var(--gold);
+  }
+
+  .top-back{
+    align-self:flex-start;
+    margin:-24px 0 20px 4px;
+  }
+
+  .multi-note{
+    text-align:center;
+    font-size:12.5px;
+    color:#a39c8a;
+    margin-bottom:14px;
+  }
+
+  footer{
+    margin-top:60px;
+    font-size:11px;
+    letter-spacing:0.15em;
+    color:#bdb29a;
+    text-transform:uppercase;
+  }
+
+  #toggleList{
+    margin-top:34px;
+    background:none;
+    border:none;
+    border-bottom:1px solid var(--gold);
+    color:var(--gold);
+    font-family:'Pretendard', sans-serif;
+    font-size:12.5px;
+    letter-spacing:0.12em;
+    text-transform:uppercase;
+    padding:4px 2px 6px;
+    cursor:pointer;
+    transition:opacity .2s;
+  }
+  #toggleList:hover{opacity:0.7;}
+
+  #fullListWrap{
+    display:none;
+    width:100%;
+    max-width:380px;
+    margin-top:22px;
+  }
+  #fullListWrap.open{display:block;}
+
+  #filterList{
+    width:100%;
+    font-family:'Pretendard', sans-serif;
+    font-size:16px;
+    padding:12px 16px;
+    border:1px solid var(--line);
+    background:#fff;
+    outline:none;
+    margin-bottom:14px;
+  }
+  #filterList:focus{border-color:var(--gold);}
+
+  #fullList{
+    border:1px solid var(--line);
+    background:#fff;
+    max-height:50vh;
+    overflow-y:auto;
+  }
+  .row{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    padding:11px 16px;
+    border-bottom:1px solid #EFE9DA;
+    font-size:14px;
+  }
+  .row:last-child{border-bottom:none;}
+  .row .rn{color:var(--ink);}
+  .row .rt{
+    color:var(--gold);
+    font-weight:600;
+    font-size:13px;
+    letter-spacing:0.02em;
+    white-space:nowrap;
+    margin-left:14px;
+  }
+  .letter-head{
+    position:sticky;
+    top:0;
+    background:var(--gold-soft);
+    color:#6b5e45;
+    font-size:11px;
+    font-weight:600;
+    letter-spacing:0.15em;
+    padding:6px 16px;
+  }
+
+  /* Floor plan */
+  .floorplan-wrap{
+    width:100%;
+    max-width:380px;
+    margin-top:22px;
+  }
+  .floorplan-title{
+    text-align:center;
+    font-size:11px;
+    letter-spacing:0.2em;
+    text-transform:uppercase;
+    color:#a39c8a;
+    margin-bottom:10px;
+  }
+  .floorplan{
+    display:grid;
+    grid-template-columns:repeat(7, 1fr);
+    grid-auto-rows:34px;
+    gap:2px;
+    background:#e9e2d0;
+    border:1px solid #d9d2bd;
+    font-size:11px;
+    overflow:hidden;
+  }
+  .fp-table{
+    cursor:pointer;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    background:#fff;
+    color:#4a4335;
+    font-weight:600;
+    min-width:0;
+  }
+  .fp-table.highlight{
+    background:var(--gold);
+    color:#fff;
+  }
+  .fp-stage{
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    background:#efe9da;
+    color:#8a8170;
+    letter-spacing:0.1em;
+    text-transform:uppercase;
+    font-size:10px;
+    min-width:0;
+    overflow-wrap:break-word;
+  }
+  .fp-podium{
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    text-align:center;
+    font-size:9.5px;
+    color:#8a8170;
+    background:#f6f2e8;
+    min-width:0;
+    overflow-wrap:break-word;
+    padding:1px;
+  }
+  .fp-label{
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    text-align:center;
+    font-size:10.5px;
+    color:#1a1a1a;
+    border:1px solid transparent;
+    line-height:1.25;
+    min-width:0;
+    overflow-wrap:break-word;
+    padding:1px;
+  }
+  .fp-extra{
+    grid-column: 1 / -1;
+    display:flex;
+    flex-wrap:wrap;
+    gap:0;
+    border-top:1px solid #d9d9d9;
+  }
+  .fp-extra .fp-table{
+    width:60px;
+    height:34px;
+    flex:none;
+  }
+
+  .table-overlay{
+    display:none;
+    position:fixed;
+    inset:0;
+    background:rgba(43,38,32,0.45);
+    align-items:flex-end;
+    justify-content:center;
+    z-index:50;
+    animation:fadeIn .2s ease;
+  }
+  .table-overlay.open{display:flex;}
+  @keyframes fadeIn{ from{opacity:0;} to{opacity:1;} }
+  .table-overlay-card{
+    width:100%;
+    max-width:420px;
+    background:#fff;
+    border-top:1px solid var(--line);
+    border-radius:18px 18px 0 0;
+    padding:28px 26px 40px;
+    max-height:70vh;
+    overflow-y:auto;
+    position:relative;
+    animation:slideUp .28s cubic-bezier(.2,.8,.2,1);
+  }
+  @keyframes slideUp{
+    from{ transform:translateY(30px); opacity:0; }
+    to{ transform:translateY(0); opacity:1; }
+  }
+  .table-overlay-card::before{
+    content:"";
+    position:absolute;
+    top:0;left:0;right:0;
+    height:3px;
+    background:linear-gradient(90deg, var(--gold-soft), var(--gold), var(--rose));
+  }
+  .table-overlay-title{
+    font-family:'Cormorant Garamond', serif;
+    font-size:26px;
+    font-style:italic;
+    color:#3a3226;
+    margin:8px 0 16px;
+  }
+  .table-guest-row{
+    padding:9px 0;
+    border-bottom:1px solid #EFE9DA;
+    font-size:14.5px;
+  }
+  .table-guest-row:last-child{border-bottom:none;}
+
+  /* ---- Program list ---- */
+  .list{
+    width:100%;
+    max-width:380px;
+    display:flex;
+    flex-direction:column;
+    gap:12px;
+  }
+  .game-wrap{
+    width:100%;
+    max-width:380px;
+  }
+  .item{
+    position:relative;
+    background:#fff;
+    border:1px solid var(--line);
+    padding:20px 22px;
+    display:flex;
+    align-items:center;
+    gap:18px;
+    text-align:left;
+    cursor:pointer;
+    overflow:hidden;
+    color:var(--ink);
+    animation:rise .45s ease both;
+    transition:transform .15s, box-shadow .15s;
+  }
+  .item:hover{
+    transform:translateY(-2px);
+    box-shadow:0 6px 18px rgba(0,0,0,0.08);
+  }
+  .item:active{ transform:translateY(0); }
+  .item.static{ cursor:default; }
+  .item.static:hover{ transform:none; box-shadow:none; }
+  .item::before{
+    content:"";
+    position:absolute;
+    top:0;left:0;bottom:0;
+    width:3px;
+    background:linear-gradient(var(--gold-soft), var(--gold), var(--rose));
+  }
+  .item-num{
+    font-family:'Cormorant Garamond', serif;
+    font-size:30px;
+    font-weight:600;
+    color:var(--gold);
+    min-width:34px;
+    line-height:1;
+  }
+  .item-text{ flex:1; }
+  .item-title{
+    font-family:'Cormorant Garamond', serif;
+    font-size:21px;
+    font-style:italic;
+    color:#3a3226;
+    margin-bottom:3px;
+  }
+  .item-kr{
+    font-size:12.5px;
+    color:#9c9181;
+    letter-spacing:0.02em;
+  }
+  .item-zh{
+    font-size:12px;
+    color:#b3a98f;
+    letter-spacing:0.02em;
+    margin-top:1px;
+  }
+  .item-arrow{
+    font-size:16px;
+    color:#c9bda0;
+  }
+
+  /* ---- Program detail sheet ---- */
+  .sheet-overlay{
+    display:none;
+    position:fixed;
+    inset:0;
+    background:rgba(43,38,32,0.45);
+    align-items:flex-end;
+    justify-content:center;
+    z-index:50;
+    animation:fadeIn .2s ease;
+  }
+  .sheet-overlay.open{ display:flex; }
+  .sheet{
+    width:100%;
+    max-width:420px;
+    background:#fff;
+    border-top:1px solid var(--line);
+    border-radius:18px 18px 0 0;
+    padding:28px 26px 40px;
+    max-height:82vh;
+    overflow-y:auto;
+    animation:slideUp .28s cubic-bezier(.2,.8,.2,1);
+    position:relative;
+  }
+  .sheet::before{
+    content:"";
+    position:absolute;
+    top:0; left:0; right:0;
+    height:3px;
+    background:linear-gradient(90deg, var(--gold-soft), var(--gold), var(--rose));
+  }
+  .sheet-handle{
+    width:36px;
+    height:4px;
+    background:var(--line);
+    border-radius:2px;
+    margin:0 auto 20px;
+  }
+  .sheet-eyebrow{
+    font-size:10.5px;
+    letter-spacing:0.3em;
+    text-transform:uppercase;
+    color:var(--gold);
+    margin-bottom:8px;
+  }
+  .sheet-title{
+    font-family:'Cormorant Garamond', serif;
+    font-size:30px;
+    font-style:italic;
+    color:#3a3226;
+    margin-bottom:22px;
+  }
+  .lang-block{ margin-bottom:20px; }
+  .lang-tag{
+    display:inline-block;
+    font-size:10px;
+    letter-spacing:0.15em;
+    text-transform:uppercase;
+    color:#fff;
+    background:var(--gold);
+    padding:3px 9px;
+    border-radius:2px;
+    margin-bottom:10px;
+  }
+  .lang-tag.en{ background:var(--rose); }
+  .lang-tag.zh{ background:var(--sage); }
+  .lang-text{
+    font-size:15.5px;
+    line-height:1.75;
+    color:#4a4335;
+  }
+  .divider{
+    height:1px;
+    background:#EFE9DA;
+    margin:20px 0;
+  }
+  .group-sheet-title-zh{
+    font-size:13px;
+    color:#b3a98f;
+    margin-top:-16px;
+    margin-bottom:22px;
+  }
+  .member-list{
+    border:1px solid var(--line);
+    background:#fff;
+  }
+  .member-row{
+    padding:11px 16px;
+    border-bottom:1px solid #EFE9DA;
+    font-size:14.5px;
+  }
+  .member-row:last-child{ border-bottom:none; }
+  .member-empty{
+    padding:22px 16px;
+    text-align:center;
+    font-size:13px;
+    color:#a39c8a;
+    line-height:1.7;
+  }
+
+  /* -- Prototype-only member editor (delete when finalized) -- */
+  #groupEditArea{
+    width:100%;
+    min-height:160px;
+    font-family:'Pretendard', sans-serif;
+    font-size:16px;
+    line-height:1.7;
+    padding:14px 16px;
+    border:1px solid var(--line);
+    background:#fff;
+    outline:none;
+    resize:vertical;
+    margin-bottom:10px;
+  }
+  #groupEditArea:focus{
+    border-color:var(--gold);
+    box-shadow:0 0 0 3px rgba(166,130,79,0.12);
+  }
+  .edit-hint{
+    font-size:11.5px;
+    color:#a39c8a;
+    margin-bottom:12px;
+    line-height:1.6;
+  }
+  .save-btn{
+    display:block;
+    width:100%;
+    background:var(--gold);
+    color:#fff;
+    border:none;
+    font-family:'Pretendard', sans-serif;
+    font-size:14px;
+    font-weight:600;
+    letter-spacing:0.05em;
+    padding:13px;
+    cursor:pointer;
+    transition:opacity .2s;
+  }
+  .save-btn:hover{ opacity:0.85; }
+  .save-status{
+    text-align:center;
+    font-size:12px;
+    color:var(--gold);
+    margin-top:8px;
+    min-height:16px;
+  }
+  .edit-toggle-btn{
+    display:block;
+    width:100%;
+    background:#fff;
+    color:var(--gold);
+    border:1px solid var(--gold);
+    font-family:'Pretendard', sans-serif;
+    font-size:13.5px;
+    font-weight:600;
+    letter-spacing:0.03em;
+    padding:12px;
+    cursor:pointer;
+    margin:14px 0 4px;
+    transition:background .2s, color .2s;
+  }
+  .edit-toggle-btn:hover{
+    background:var(--gold);
+    color:#fff;
+  }
+  .edit-wrap{
+    margin-top:14px;
+  }
+  .lang-edit-block{
+    margin-bottom:16px;
+  }
+  .lang-edit-label{
+    font-size:11px;
+    letter-spacing:0.15em;
+    text-transform:uppercase;
+    color:var(--gold);
+    margin-bottom:6px;
+  }
+  .lang-textarea{
+    width:100%;
+    min-height:120px;
+    font-family:'Pretendard', sans-serif;
+    font-size:16px;
+    line-height:1.7;
+    padding:14px 16px;
+    border:1px solid var(--line);
+    background:#fff;
+    outline:none;
+    resize:vertical;
+  }
+  .lang-textarea:focus{
+    border-color:var(--gold);
+    box-shadow:0 0 0 3px rgba(166,130,79,0.12);
+  }
+
+  /* -- Caption display (Father's Speech) -- */
+  .caption-display{
+    border:1px solid var(--line);
+    padding:26px 22px;
+    margin-bottom:16px;
+    min-height:140px;
+    display:flex;
+    flex-direction:column;
+    justify-content:center;
+  }
+  .caption-empty{
+    text-align:center;
+    font-size:13px;
+    color:#a39c8a;
+    line-height:1.7;
+  }
+  .caption-nav{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    margin-bottom:26px;
+  }
+  .nav-btn{
+    background:none;
+    border:1px solid var(--line);
+    color:#6b5e45;
+    font-family:'Pretendard', sans-serif;
+    font-size:13px;
+    padding:9px 16px;
+    cursor:pointer;
+    transition:border-color .2s, color .2s;
+  }
+  .nav-btn:hover{ border-color:var(--gold); color:var(--gold); }
+  .nav-btn:disabled{ opacity:0.35; cursor:default; }
+  .nav-btn:disabled:hover{ border-color:var(--line); color:#6b5e45; }
+  .caption-counter{
+    font-size:12px;
+    letter-spacing:0.1em;
+    color:#a39c8a;
+  }
+</style>
+</head>
+<body>
+
+<!-- ======================= PROGRAM VIEW ======================= -->
+<div class="view" id="programView">
+
+  <div class="ornament"></div>
+  <div class="eyebrow">Order of the Day</div>
+  <h1>Wedding Program</h1>
+  <p class="sub">순서를 눌러 자세한 안내를 확인하세요<br>Tap an item below for details</p>
+
+  <div class="list" id="list"></div>
+
+  <footer>Thank you for celebrating with us</footer>
+
+</div>
+
+<!-- ======================= GROUP PHOTO VIEW ======================= -->
+<div class="view" id="groupsView" style="display:none;">
+
+  <button type="button" class="back-btn top-back" id="groupsToMainBtn">← Back</button>
+
+  <div class="ornament"></div>
+  <div class="eyebrow">Group Photo</div>
+  <h1>Photo Groups</h1>
+  <p class="sub">단체 사진 그룹을 눌러 명단을 확인하세요<br>Tap a group to see the name list</p>
+
+  <div class="list" id="groupList"></div>
+
+  <footer>Thank you for celebrating with us</footer>
+
+  <div id="groupSheetOverlay" class="sheet-overlay">
+    <div class="sheet">
+      <div class="sheet-handle"></div>
+      <button type="button" class="back-btn" id="groupSheetBackBtn">← Back</button>
+      <div class="sheet-eyebrow" id="groupSheetEyebrow"></div>
+      <div class="sheet-title" id="groupSheetTitle"></div>
+      <div class="group-sheet-title-zh" id="groupSheetTitleZh"></div>
+
+      <div class="member-list" id="groupMemberList"></div>
+
+      <!-- ▼▼▼ 프로토타입 전용 - 확정되면 이 블록 삭제 ▼▼▼ -->
+      <button type="button" class="edit-toggle-btn" id="groupEditToggleBtn">수정하기 · Edit</button>
+      <div class="edit-wrap" id="groupEditWrap" style="display:none;">
+        <div class="edit-hint">한 줄에 한 명씩 이름을 입력하세요 (예: 홍길동)<br>Enter one name per line</div>
+        <textarea id="groupEditArea"></textarea>
+        <button type="button" class="save-btn" id="groupSaveBtn">저장 · Save</button>
+      </div>
+      <div class="save-status" id="groupSaveStatus"></div>
+      <!-- ▲▲▲ 프로토타입 전용 끝 ▲▲▲ -->
+    </div>
+  </div>
+
+</div>
+
+<!-- ======================= FATHER'S SPEECH VIEW ======================= -->
+<div class="view" id="fatherView" style="display:none;">
+
+  <button type="button" class="back-btn top-back" id="fatherToMainBtn">← Back</button>
+
+  <div class="ornament"></div>
+  <div class="eyebrow">Father's Speech</div>
+  <h1>Father's Speech</h1>
+  <p class="sub">아버님을 눌러 통역 자막을 확인하세요<br>Tap a father to view live caption</p>
+
+  <div class="list" id="fatherList"></div>
+
+  <footer>Thank you for celebrating with us</footer>
+
+  <div id="fatherSheetOverlay" class="sheet-overlay">
+    <div class="sheet">
+      <div class="sheet-handle"></div>
+      <button type="button" class="back-btn" id="fatherSheetBackBtn">← Back</button>
+      <div class="sheet-eyebrow" id="fatherSheetEyebrow"></div>
+      <div class="sheet-title" id="fatherSheetTitle"></div>
+
+      <div id="captionViewWrap">
+        <div class="caption-display" id="captionDisplay"></div>
+        <div class="caption-nav">
+          <button type="button" class="nav-btn" id="captionPrevBtn">‹ Prev</button>
+          <span class="caption-counter" id="captionCounter"></span>
+          <button type="button" class="nav-btn" id="captionNextBtn">Next ›</button>
+        </div>
+      </div>
+
+      <!-- ▼▼▼ 프로토타입 전용 - 확정되면 이 블록 삭제 ▼▼▼ -->
+      <button type="button" class="edit-toggle-btn" id="fatherEditToggleBtn">수정하기 · Edit</button>
+      <div class="edit-wrap" id="fatherEditWrap" style="display:none;">
+        <div class="edit-hint" id="fatherEditHint">한 줄에 자막 하나씩 입력하세요. 같은 줄 번호끼리 두 언어가 짝지어집니다.<br>Enter one caption per line. The same line number pairs the two languages together.</div>
+        <div class="lang-edit-block">
+          <div class="lang-edit-label" id="fatherEditLabelA"></div>
+          <textarea class="lang-textarea" id="fatherEditAreaA"></textarea>
+        </div>
+        <div class="lang-edit-block">
+          <div class="lang-edit-label" id="fatherEditLabelB"></div>
+          <textarea class="lang-textarea" id="fatherEditAreaB"></textarea>
+        </div>
+        <button type="button" class="save-btn" id="fatherSaveBtn">저장 · Save</button>
+      </div>
+      <div class="save-status" id="fatherSaveStatus"></div>
+      <!-- ▲▲▲ 프로토타입 전용 끝 ▲▲▲ -->
+    </div>
+  </div>
+
+</div>
+
+<!-- ======================= GAME VIEW ======================= -->
+<div class="view" id="gameView" style="display:none;">
+
+  <button type="button" class="back-btn top-back" id="gameToMainBtn">← Back</button>
+
+  <div class="ornament"></div>
+  <div class="eyebrow">Game Time</div>
+  <h1>Game</h1>
+  <p class="sub">질문을 하나씩 확인하세요<br>One question at a time</p>
+
+  <div class="game-wrap" id="gameViewWrap">
+    <div class="caption-display" id="gameQuestionDisplay"></div>
+    <div class="caption-nav">
+      <button type="button" class="nav-btn" id="gamePrevBtn">‹ Prev</button>
+      <span class="caption-counter" id="gameCounter"></span>
+      <button type="button" class="nav-btn" id="gameNextBtn">Next ›</button>
+    </div>
+  </div>
+
+  <!-- ▼▼▼ 프로토타입 전용 - 확정되면 이 블록 삭제 ▼▼▼ -->
+  <button type="button" class="edit-toggle-btn game-wrap" id="gameEditToggleBtn">수정하기 · Edit</button>
+  <div class="edit-wrap game-wrap" id="gameEditWrap" style="display:none;">
+    <div class="edit-hint">한 줄에 질문 하나씩 입력하세요<br>Enter one question per line</div>
+    <textarea class="lang-textarea" id="gameEditArea"></textarea>
+    <button type="button" class="save-btn" id="gameSaveBtn">저장 · Save</button>
+  </div>
+  <div class="save-status game-wrap" id="gameSaveStatus"></div>
+  <!-- ▲▲▲ 프로토타입 전용 끝 ▲▲▲ -->
+
+  <footer>Thank you for celebrating with us</footer>
+
+</div>
+
+<!-- ======================= SEATING VIEW ======================= -->
+<div class="view" id="seatingView" style="display:none;">
+
+  <button type="button" class="back-btn top-back" id="toProgramBtn">← Back</button>
+
+  <div class="ornament"></div>
+  <div class="eyebrow">Reception Seating</div>
+  <h1>Find Your Seat</h1>
+  <p class="sub">Please enter your name below<br>and we'll show you to your table</p>
+
+  <div class="search-wrap">
+    <input id="q" type="text" placeholder="Enter your name" autocomplete="off" autocapitalize="off">
+  </div>
+
+  <div id="results"></div>
+  <div id="resultMapWrap" class="floorplan-wrap" style="display:none;">
+    <div class="floorplan-title">Floor Plan</div>
+    <div id="resultMap" class="floorplan"></div>
+  </div>
+  <p class="hint" id="hint">First or last name is fine</p>
+
+  <button id="toggleList" type="button">View full list</button>
+  <div id="fullListWrap">
+    <div class="floorplan-wrap">
+      <div class="floorplan-title">Floor Plan</div>
+      <div id="overviewMap" class="floorplan"></div>
+    </div>
+    <input id="filterList" type="text" placeholder="Filter list..." autocomplete="off" autocapitalize="off">
+    <div id="fullList"></div>
+  </div>
+
+  <footer>Thank you for celebrating with us</footer>
+
+  <div id="tableOverlay" class="table-overlay">
+    <div class="table-overlay-card">
+      <button type="button" class="back-btn" id="tableOverlayBack">← Back</button>
+      <div class="table-overlay-title" id="tableOverlayTitle"></div>
+      <div id="tableOverlayList"></div>
+    </div>
+  </div>
+
+</div>
+
+<script>
+/* =================================================================
+   저장 안 된 변경사항이 있으면 창을 닫거나 벗어날 때 경고
+   (프로토타입 전용: 확정되면 이 블록 삭제)
+   ================================================================= */
+let hasUnsavedChanges = false;
+
+window.addEventListener('beforeunload', (e) => {
+  if(hasUnsavedChanges){
+    e.preventDefault();
+    e.returnValue = ''; // 브라우저가 표시하는 확인 문구는 커스텀 텍스트를 지원하지 않음 (Edge/Chrome 공통 제한)
+  }
+});
+
+/* =================================================================
+   VIEW SWITCHING (부드러운 전환 효과 포함)
+   ================================================================= */
+const programView = document.getElementById('programView');
+const seatingView = document.getElementById('seatingView');
+const groupsView = document.getElementById('groupsView');
+const fatherView = document.getElementById('fatherView');
+const gameView = document.getElementById('gameView');
+
+const ALL_VIEWS = [programView, seatingView, groupsView, fatherView, gameView];
+
+function hideAllViews(){
+  ALL_VIEWS.forEach(v => { v.style.display = 'none'; });
+}
+
+function switchView(target){
+  const current = ALL_VIEWS.find(v => v !== target && v.style.display !== 'none');
+  if(current){
+    current.classList.add('view-fade-out');
+    setTimeout(() => {
+      current.style.display = 'none';
+      current.classList.remove('view-fade-out');
+      revealTarget();
+    }, 220);
+  } else {
+    revealTarget();
+  }
+
+  function revealTarget(){
+    target.style.display = 'flex';
+    target.classList.add('view-fade-in');
+    // 강제 리플로우 후 클래스를 제거해야 트랜지션이 재생됨
+    void target.offsetWidth;
+    requestAnimationFrame(() => {
+      target.classList.remove('view-fade-in');
+    });
+    window.scrollTo(0,0);
+  }
+}
+
+function showSeating(){ switchView(seatingView); }
+function showGroups(){ switchView(groupsView); }
+function showFatherView(){ switchView(fatherView); }
+function showGameView(){ switchView(gameView); }
+function showProgram(){ switchView(programView); }
+
+document.getElementById('toProgramBtn').addEventListener('click', showProgram);
+document.getElementById('groupsToMainBtn').addEventListener('click', showProgram);
+document.getElementById('fatherToMainBtn').addEventListener('click', showProgram);
+document.getElementById('gameToMainBtn').addEventListener('click', showProgram);
+
+/* =================================================================
+   PROGRAM (식순) — 아래 내용을 자유롭게 수정하세요.
+   link:"seating" 인 항목은 팝업 대신 좌석 찾기 화면으로 전환됩니다.
+   ================================================================= */
+const PROGRAM = [
+  {
+    num: 1,
+    titleEn: "Group Photo",
+    titleKr: "단체 사진 촬영",
+    titleZh: "团体合影",
+    link: "groups",
+    kr: "모든 하객분들과 함께 단체 사진을 촬영하는 시간입니다. 안내에 따라 정해진 장소로 이동해 주세요.",
+    en: "Time for a group photo with all our guests. Please follow staff guidance to the photo area.",
+    zh: "这是与所有宾客一起拍摄集体照的时间，请按照工作人员的指引前往指定地点。"
+  },
+  {
+    num: 2,
+    titleEn: "Dinner Seating",
+    titleKr: "착석 안내",
+    titleZh: "入座引导",
+    link: "seating"
+  },
+  {
+    num: 3,
+    titleEn: "Dinner Time",
+    titleKr: "만찬 시간",
+    titleZh: "晚宴时间",
+    kr: "맛있는 저녁 식사와 함께 즐거운 담소를 나누는 시간입니다. 편안히 즐겨 주세요.",
+    en: "Please enjoy dinner and conversation with those around you.",
+    zh: "请享用美味的晚餐，并与身边的宾客愉快交谈。"
+  },
+  {
+    num: 4,
+    titleEn: "First Dance",
+    titleKr: "첫 춤",
+    titleZh: "首舞",
+    kr: "신랑 신부의 첫 춤이 진행됩니다. 두 사람을 위해 따뜻한 박수와 축하를 보내주세요.",
+    en: "The couple will share their first dance. Please join us with warm applause and celebration.",
+    zh: "新郎新娘将进行他们的第一支舞，请为两人送上热烈的掌声与祝福。"
+  },
+  {
+    num: 5,
+    titleEn: "Father's Speech",
+    titleKr: "아버지의 축사",
+    titleZh: "父亲致辞",
+    link: "fatherSpeech",
+    kr: "신부 아버지께서 두 사람을 위한 따뜻한 축사를 전합니다.",
+    en: "A heartfelt speech from the bride's father for the couple.",
+    zh: "新娘的父亲将为新人送上温暖的祝福致辞。"
+  },
+  {
+    num: 6,
+    titleEn: "Game",
+    titleKr: "게임 시간",
+    titleZh: "游戏时间",
+    link: "game",
+    kr: "하객분들과 함께하는 즐거운 게임 시간입니다. 많은 참여 부탁드립니다!",
+    en: "A fun game time with our guests — please join in!",
+    zh: "与宾客们一起进行有趣的游戏时间，欢迎大家踊跃参与！"
+  },
+  {
+    num: 7,
+    titleEn: "Finale",
+    titleKr: "피날레",
+    titleZh: "压轴环节",
+    kr: "모두 함께하는 마무리 순서입니다. 오늘 저희의 결혼을 축하하러 와주셔서 진심으로 감사드립니다.",
+    en: "Our closing moment together. Thank you so much for celebrating our wedding with us today.",
+    zh: "这是我们共同度过的最后时刻，衷心感谢大家今天前来祝贺我们的婚礼。"
+  }
+];
+
+const listEl = document.getElementById('list');
+PROGRAM.forEach(item => {
+  const el = document.createElement('div');
+  el.className = 'item';
+  if(!item.link) el.classList.add('static');
+  const arrowHtml = item.link ? '<div class="item-arrow">⌄</div>' : '';
+  el.innerHTML = `
+    <div class="item-num">${String(item.num).padStart(2,'0')}</div>
+    <div class="item-text">
+      <div class="item-title">${item.titleEn}</div>
+      <div class="item-kr">${item.titleKr}</div>
+      <div class="item-zh">${item.titleZh}</div>
+    </div>
+    ${arrowHtml}
+  `;
+  if(item.link === 'seating'){
+    el.addEventListener('click', showSeating);
+  } else if(item.link === 'groups'){
+    el.addEventListener('click', showGroups);
+  } else if(item.link === 'fatherSpeech'){
+    el.addEventListener('click', showFatherView);
+  } else if(item.link === 'game'){
+    el.addEventListener('click', showGameView);
+  }
+  listEl.appendChild(el);
+});
+
+/* =================================================================
+   GROUP PHOTO GROUPS — 아래 members 배열에 이름을 채워 넣으세요.
+   ================================================================= */
+const GROUPS = [
+  { num:1,  titleKr:"김종욱 목사님", titleEn:"Pastor John",        titleZh:"金鐘旭牧师",   members: [] },
+  { num:2,  titleKr:"양가 부모님",   titleEn:"Parents",             titleZh:"双方父母",     members: [] },
+  { num:3,  titleKr:"양가 가족",     titleEn:"Whole Family",        titleZh:"双方家人",     members: [] },
+  { num:4,  titleKr:"케일런 목장",   titleEn:"Kailun's HC",         titleZh:"凯伦小组",     members: [] },
+  { num:5,  titleKr:"이두원 목장",   titleEn:"Thomas HC",           titleZh:"多马小组",     members: [] },
+  { num:6,  titleKr:"한국2조",       titleEn:"Kor2",                titleZh:"韩语2组",      members: [] },
+  { num:7,  titleKr:"영어2조",       titleEn:"Eng2",                titleZh:"英语2组",      members: [] },
+  { num:8,  titleKr:"해외에서 오신 손님 1", titleEn:"People from abroad 1", titleZh:"海外来宾1", members: [] },
+  { num:9,  titleKr:"해외에서 오신 손님 2", titleEn:"From abroad 2",       titleZh:"海外来宾2", members: [] },
+  { num:10, titleKr:"케일런 직장 동료", titleEn:"Evolution",         titleZh:"凯伦同事（Evolution）", members: [] }
+];
+
+// -- 프로토타입 전용: localStorage에 저장된 명단이 있으면 불러오기 (확정되면 삭제) --
+GROUPS.forEach(g => {
+  try{
+    const saved = localStorage.getItem(`group-members-${g.num}`);
+    if(saved){
+      g.members = JSON.parse(saved);
+    }
+  }catch(e){ /* ignore */ }
+});
+
+const groupListEl = document.getElementById('groupList');
+GROUPS.forEach(g => {
+  const el = document.createElement('div');
+  el.className = 'item';
+  el.innerHTML = `
+    <div class="item-num">${String(g.num).padStart(2,'0')}</div>
+    <div class="item-text">
+      <div class="item-title">${g.titleEn}</div>
+      <div class="item-kr">${g.titleKr}</div>
+      <div class="item-zh">${g.titleZh}</div>
+    </div>
+    <div class="item-arrow">›</div>
+  `;
+  el.addEventListener('click', () => openGroupSheet(g));
+  groupListEl.appendChild(el);
+});
+
+const groupSheetOverlay = document.getElementById('groupSheetOverlay');
+const groupSheetEyebrow = document.getElementById('groupSheetEyebrow');
+const groupSheetTitle = document.getElementById('groupSheetTitle');
+const groupSheetTitleZh = document.getElementById('groupSheetTitleZh');
+const groupMemberList = document.getElementById('groupMemberList');
+const groupEditToggleBtn = document.getElementById('groupEditToggleBtn');
+const groupEditWrap = document.getElementById('groupEditWrap');
+const groupEditArea = document.getElementById('groupEditArea');
+const groupSaveBtn = document.getElementById('groupSaveBtn');
+const groupSaveStatus = document.getElementById('groupSaveStatus');
+let currentGroup = null;
+
+function renderGroupMembers(g){
+  groupMemberList.innerHTML = g.members.length
+    ? g.members.map(name => `<div class="member-row">${name}</div>`).join('')
+    : `<div class="member-empty">명단이 아직 등록되지 않았습니다<br>Name list coming soon<br>名单尚未添加</div>`;
+}
+
+function closeGroupEditWrap(){
+  groupEditWrap.style.display = 'none';
+  groupMemberList.style.display = 'block';
+  groupEditToggleBtn.textContent = '수정하기 · Edit';
+  hasUnsavedChanges = false;
+}
+
+function openGroupSheet(g){
+  currentGroup = g;
+  groupSheetEyebrow.textContent = `${String(g.num).padStart(2,'0')} · ${g.titleKr}`;
+  groupSheetTitle.textContent = g.titleEn;
+  groupSheetTitleZh.textContent = g.titleZh;
+  groupSaveStatus.textContent = '';
+  renderGroupMembers(g);
+  closeGroupEditWrap();
+  groupSheetOverlay.classList.add('open');
+}
+
+// -- 프로토타입 전용: 수정하기 버튼 -- 이전에 저장된 내용을 그대로 불러와 그 자리에서 바로 수정 --
+groupEditToggleBtn.addEventListener('click', () => {
+  if(!currentGroup) return;
+  const isOpen = groupEditWrap.style.display !== 'none';
+  if(isOpen){
+    closeGroupEditWrap();
+  } else {
+    groupEditArea.value = currentGroup.members.join('\n'); // 이전 정보 그대로 이어받기
+    groupMemberList.style.display = 'none';
+    groupEditWrap.style.display = 'block';
+    groupEditToggleBtn.textContent = '닫기 · Close';
+  }
+});
+
+
+// -- 프로토타입 전용: 저장 버튼 (확정되면 이 블록과 위 textarea/버튼 삭제) --
+groupEditArea.addEventListener('input', () => { hasUnsavedChanges = true; });
+
+groupSaveBtn.addEventListener('click', () => {
+  if(!currentGroup) return;
+  const names = groupEditArea.value
+    .split('\n')
+    .map(s => s.trim())
+    .filter(s => s.length > 0);
+  currentGroup.members = names;
+  try{
+    localStorage.setItem(`group-members-${currentGroup.num}`, JSON.stringify(names));
+  }catch(e){ /* ignore */ }
+  hasUnsavedChanges = false;
+  renderGroupMembers(currentGroup);
+  closeGroupEditWrap();
+  groupSaveStatus.textContent = '저장되었습니다 · Saved';
+  setTimeout(() => { groupSaveStatus.textContent = ''; }, 2000);
+});
+
+document.getElementById('groupSheetBackBtn').addEventListener('click', () => {
+  // 이 화면(명단 시트)의 실제 이전 화면은 메인 메뉴가 아니라 그룹 목록(groupsView)이므로
+  // 오버레이만 닫아 그룹 목록으로 돌아간다 (메인 메뉴로 바로 가지 않음, 편집 여부 상관없이 동일)
+  groupSheetOverlay.classList.remove('open');
+});
+groupSheetOverlay.addEventListener('click', e => {
+  if(e.target === groupSheetOverlay) groupSheetOverlay.classList.remove('open');
+});
+
+/* =================================================================
+   FATHER'S SPEECH — 아버지별 실시간 통역 자막
+   langs: 화면에 보여줄 언어 2개. 아버지가 말하는 언어는 제외하고
+   나머지 언어만 큰 글씨로 보여줍니다.
+   captions는 저장 버튼으로 채워집니다 (프로토타입).
+   ================================================================= */
+const LANG_LABEL = { kr:'한국어', en:'ENGLISH', zh:'中文' };
+const LANG_CLASS = { kr:'', en:'en', zh:'zh' };
+
+const FATHER_SPEECH = [
+  { num:1, titleKr:"신랑의 아버지", titleEn:"Hyuntak's Father", titleZh:"新郎父亲", langs:["en","zh"], captions: [] },
+  { num:2, titleKr:"신부의 아버지", titleEn:"Kailun's Father",  titleZh:"新娘父亲", langs:["kr","en"], captions: [] }
+];
+
+// -- 프로토타입 전용: localStorage에 저장된 자막이 있으면 불러오기 (확정되면 삭제) --
+FATHER_SPEECH.forEach(item => {
+  try{
+    const saved = localStorage.getItem(`father-captions-${item.num}`);
+    if(saved) item.captions = JSON.parse(saved);
+  }catch(e){ /* ignore */ }
+});
+
+const fatherListEl = document.getElementById('fatherList');
+FATHER_SPEECH.forEach(item => {
+  const el = document.createElement('div');
+  el.className = 'item';
+  el.innerHTML = `
+    <div class="item-num">${String(item.num).padStart(2,'0')}</div>
+    <div class="item-text">
+      <div class="item-title">${item.titleEn}</div>
+      <div class="item-kr">${item.titleKr}</div>
+      <div class="item-zh">${item.titleZh}</div>
+    </div>
+    <div class="item-arrow">⌄</div>
+  `;
+  el.addEventListener('click', () => openFatherSheet(item));
+  fatherListEl.appendChild(el);
+});
+
+const fatherSheetOverlay = document.getElementById('fatherSheetOverlay');
+const fatherSheetEyebrow = document.getElementById('fatherSheetEyebrow');
+const fatherSheetTitle = document.getElementById('fatherSheetTitle');
+const captionViewWrap = document.getElementById('captionViewWrap');
+const captionDisplay = document.getElementById('captionDisplay');
+const captionCounter = document.getElementById('captionCounter');
+const captionPrevBtn = document.getElementById('captionPrevBtn');
+const captionNextBtn = document.getElementById('captionNextBtn');
+const fatherEditToggleBtn = document.getElementById('fatherEditToggleBtn');
+const fatherEditWrap = document.getElementById('fatherEditWrap');
+const fatherEditLabelA = document.getElementById('fatherEditLabelA');
+const fatherEditLabelB = document.getElementById('fatherEditLabelB');
+const fatherEditAreaA = document.getElementById('fatherEditAreaA');
+const fatherEditAreaB = document.getElementById('fatherEditAreaB');
+const fatherSaveBtn = document.getElementById('fatherSaveBtn');
+const fatherSaveStatus = document.getElementById('fatherSaveStatus');
+
+let currentFatherItem = null;
+let captionIndex = 0;
+
+function closeFatherEditWrap(){
+  fatherEditWrap.style.display = 'none';
+  captionViewWrap.style.display = 'block';
+  fatherEditToggleBtn.textContent = '수정하기 · Edit';
+  hasUnsavedChanges = false;
+}
+
+function fillFatherEditAreas(item){
+  // 이전에 저장된 자막을 언어별로 그대로 이어받아 계속 수정할 수 있도록 채워넣기
+  fatherEditLabelA.textContent = LANG_LABEL[item.langs[0]];
+  fatherEditLabelB.textContent = LANG_LABEL[item.langs[1]];
+  fatherEditAreaA.value = item.captions.map(c => c[item.langs[0]] || '').join('\n');
+  fatherEditAreaB.value = item.captions.map(c => c[item.langs[1]] || '').join('\n');
+}
+
+function openFatherSheet(item){
+  currentFatherItem = item;
+  captionIndex = 0;
+  fatherSheetEyebrow.textContent = `${String(item.num).padStart(2,'0')} · ${item.titleKr} · ${item.titleZh}`;
+  fatherSheetTitle.textContent = item.titleEn;
+
+  fillFatherEditAreas(item);
+
+  renderCaption();
+  closeFatherEditWrap();
+  fatherSheetOverlay.classList.add('open');
+}
+
+// -- 프로토타입 전용: 수정하기 버튼 -- 아버지별로 이전에 저장된 내용을 언어별로 그대로 불러와 그 자리에서 바로 수정 --
+fatherEditToggleBtn.addEventListener('click', () => {
+  if(!currentFatherItem) return;
+  const isOpen = fatherEditWrap.style.display !== 'none';
+  if(isOpen){
+    closeFatherEditWrap();
+  } else {
+    fillFatherEditAreas(currentFatherItem);
+    captionViewWrap.style.display = 'none';
+    fatherEditWrap.style.display = 'block';
+    fatherEditToggleBtn.textContent = '닫기 · Close';
+  }
+});
+
+function renderCaption(){
+  const item = currentFatherItem;
+  const total = item.captions.length;
+  if(total === 0){
+    captionDisplay.innerHTML = `<div class="caption-empty">아직 자막이 없습니다<br>No captions yet</div>`;
+    captionCounter.textContent = '0 / 0';
+    captionPrevBtn.disabled = true;
+    captionNextBtn.disabled = true;
+    return;
+  }
+  if(captionIndex < 0) captionIndex = 0;
+  if(captionIndex > total - 1) captionIndex = total - 1;
+
+  const c = item.captions[captionIndex];
+  captionDisplay.innerHTML = item.langs.map(l => `
+    <div class="lang-block">
+      <span class="lang-tag ${LANG_CLASS[l]}">${LANG_LABEL[l]}</span>
+      <div class="lang-text">${c[l] || ''}</div>
+    </div>
+  `).join('');
+
+  captionCounter.textContent = `${captionIndex + 1} / ${total}`;
+  captionPrevBtn.disabled = captionIndex === 0;
+  captionNextBtn.disabled = captionIndex === total - 1;
+}
+
+captionPrevBtn.addEventListener('click', () => { captionIndex--; renderCaption(); });
+captionNextBtn.addEventListener('click', () => { captionIndex++; renderCaption(); });
+
+fatherEditAreaA.addEventListener('input', () => { hasUnsavedChanges = true; });
+fatherEditAreaB.addEventListener('input', () => { hasUnsavedChanges = true; });
+
+// -- 프로토타입 전용: 저장 버튼 (확정되면 이 블록과 위 textarea/버튼 삭제) --
+fatherSaveBtn.addEventListener('click', () => {
+  const item = currentFatherItem;
+  if(!item) return;
+
+  let linesA = fatherEditAreaA.value.split('\n').map(s => s.trim());
+  let linesB = fatherEditAreaB.value.split('\n').map(s => s.trim());
+  let total = Math.max(linesA.length, linesB.length);
+  // 두 줄이 모두 빈 값인 마지막 줄들은 제거 (끝에 남은 빈 줄 정리)
+  while(total > 0 && (linesA[total - 1] || '') === '' && (linesB[total - 1] || '') === ''){
+    total--;
+  }
+
+  const captions = [];
+  for(let i = 0; i < total; i++){
+    const obj = {};
+    obj[item.langs[0]] = linesA[i] || '';
+    obj[item.langs[1]] = linesB[i] || '';
+    captions.push(obj);
+  }
+
+  item.captions = captions;
+  try{
+    localStorage.setItem(`father-captions-${item.num}`, JSON.stringify(captions));
+  }catch(e){ /* ignore */ }
+  hasUnsavedChanges = false;
+  captionIndex = 0;
+  renderCaption();
+  closeFatherEditWrap();
+  fatherSaveStatus.textContent = '저장되었습니다 · Saved';
+  setTimeout(() => { fatherSaveStatus.textContent = ''; }, 2000);
+});
+
+document.getElementById('fatherSheetBackBtn').addEventListener('click', () => {
+  // 이 화면(자막 시트)의 실제 이전 화면은 메인 메뉴가 아니라 아버지 목록(fatherView)이므로
+  // 오버레이만 닫아 목록으로 돌아간다 (메인 메뉴로 바로 가지 않음, 편집 여부 상관없이 동일)
+  fatherSheetOverlay.classList.remove('open');
+});
+fatherSheetOverlay.addEventListener('click', e => {
+  if(e.target === fatherSheetOverlay) fatherSheetOverlay.classList.remove('open');
+});
+
+/* =================================================================
+   GAME — 청중에게 물어볼 질문을 하나씩 보여주는 화면
+   아직 게임 방식이 정해지지 않아, 우선 질문 목록을 하나씩
+   넘겨보는 형태로 구성 (아래 QUESTIONS 배열을 수정하거나
+   "수정하기" 버튼으로 편집 가능, 프로토타입)
+   ================================================================= */
+let GAME_QUESTIONS = [
+  "신랑과 신부가 처음 만난 곳은 어디일까요? | Where did the couple first meet?",
+  "두 사람이 사귄 지 얼마나 되었을까요? | How long have they been dating?",
+  "신랑이 프로포즈한 장소는 어디일까요? | Where did the groom propose?",
+  "신랑 신부의 공통 취미는 무엇일까요? | What hobby do they share?"
+];
+
+try{
+  const savedQuestions = localStorage.getItem('game-questions');
+  if(savedQuestions) GAME_QUESTIONS = JSON.parse(savedQuestions);
+}catch(e){ /* ignore */ }
+
+const gameQuestionDisplay = document.getElementById('gameQuestionDisplay');
+const gameCounter = document.getElementById('gameCounter');
+const gamePrevBtn = document.getElementById('gamePrevBtn');
+const gameNextBtn = document.getElementById('gameNextBtn');
+const gameEditToggleBtn = document.getElementById('gameEditToggleBtn');
+const gameEditWrap = document.getElementById('gameEditWrap');
+const gameEditArea = document.getElementById('gameEditArea');
+const gameSaveBtn = document.getElementById('gameSaveBtn');
+const gameSaveStatus = document.getElementById('gameSaveStatus');
+const gameViewWrap = document.getElementById('gameViewWrap');
+
+let gameIndex = 0;
+
+function renderGameQuestion(){
+  const total = GAME_QUESTIONS.length;
+  if(total === 0){
+    gameQuestionDisplay.innerHTML = `<div class="caption-empty">아직 질문이 없습니다<br>No questions yet</div>`;
+    gameCounter.textContent = '0 / 0';
+    gamePrevBtn.disabled = true;
+    gameNextBtn.disabled = true;
+    return;
+  }
+  if(gameIndex < 0) gameIndex = 0;
+  if(gameIndex > total - 1) gameIndex = total - 1;
+
+  gameQuestionDisplay.innerHTML = `<div class="lang-text" style="text-align:center; font-size:16px; line-height:1.7;">${escapeHtml(GAME_QUESTIONS[gameIndex])}</div>`;
+  gameCounter.textContent = `${gameIndex + 1} / ${total}`;
+  gamePrevBtn.disabled = gameIndex === 0;
+  gameNextBtn.disabled = gameIndex === total - 1;
+}
+
+gamePrevBtn.addEventListener('click', () => { gameIndex--; renderGameQuestion(); });
+gameNextBtn.addEventListener('click', () => { gameIndex++; renderGameQuestion(); });
+
+function closeGameEditWrap(){
+  gameEditWrap.style.display = 'none';
+  gameViewWrap.style.display = 'block';
+  gameEditToggleBtn.textContent = '수정하기 · Edit';
+  hasUnsavedChanges = false;
+}
+
+function fillGameEditArea(){
+  gameEditArea.value = GAME_QUESTIONS.join('\n');
+}
+
+// -- 프로토타입 전용: 수정하기 버튼 -- 이전에 저장된 질문을 그대로 불러와 그 자리에서 바로 수정 --
+gameEditToggleBtn.addEventListener('click', () => {
+  const isOpen = gameEditWrap.style.display !== 'none';
+  if(isOpen){
+    closeGameEditWrap();
+  } else {
+    fillGameEditArea();
+    gameViewWrap.style.display = 'none';
+    gameEditWrap.style.display = 'block';
+    gameEditToggleBtn.textContent = '닫기 · Close';
+  }
+});
+
+gameEditArea.addEventListener('input', () => { hasUnsavedChanges = true; });
+
+// -- 프로토타입 전용: 저장 버튼 (확정되면 이 블록과 위 textarea/버튼 삭제) --
+gameSaveBtn.addEventListener('click', () => {
+  const lines = gameEditArea.value.split('\n').map(s => s.trim()).filter(s => s.length > 0);
+  GAME_QUESTIONS = lines;
+  try{
+    localStorage.setItem('game-questions', JSON.stringify(lines));
+  }catch(e){ /* ignore */ }
+  gameIndex = 0;
+  renderGameQuestion();
+  closeGameEditWrap();
+  gameSaveStatus.textContent = '저장되었습니다 · Saved';
+  setTimeout(() => { gameSaveStatus.textContent = ''; }, 2000);
+});
+
+renderGameQuestion();
+closeGameEditWrap();
+
+/* =================================================================
+   SEATING (좌석 찾기) — 기존 로직 그대로
+   ================================================================= */
+const input = document.getElementById('q');
+const results = document.getElementById('results');
+const hint = document.getElementById('hint');
+
+function normalize(s){
+  return s.toLowerCase().replace(/\s+/g,'').trim();
+}
+
+const GUESTS = [{"name": "Andrea", "table": "Table 1"}, {"name": "Hong", "table": "Table 2"}, {"name": "Jeongah Jun", "table": "Table 3"}, {"name": "Pastor John", "table": "Table 4"}, {"name": "Junki", "table": "Table 5"}, {"name": "Eugenia", "table": "Table 6"}, {"name": "Dollars", "table": "Table 7"}, {"name": "Belinda", "table": "Table 8"}, {"name": "Isaac", "table": "Table 9"}, {"name": "Shengyuan", "table": "Table 10"}, {"name": "John", "table": "Table 1"}, {"name": "Harry", "table": "Table 2"}, {"name": "Hwankyu Shin", "table": "Table 3"}, {"name": "Pastor Marie", "table": "Table 4"}, {"name": "Youna", "table": "Table 5"}, {"name": "Edward", "table": "Table 6"}, {"name": "Marc", "table": "Table 7"}, {"name": "Joanna", "table": "Table 8"}, {"name": "Alice", "table": "Table 9"}, {"name": "Michelle", "table": "Table 10"}, {"name": "James", "table": "Table 1"}, {"name": "Kailly", "table": "Table 2"}, {"name": "HT family", "table": "Table 3"}, {"name": "Jun", "table": "Table 4"}, {"name": "Karl", "table": "Table 5"}, {"name": "Susie", "table": "Table 6"}, {"name": "Ariel", "table": "Table 7"}, {"name": "Lynn", "table": "Table 8"}, {"name": "Oliver", "table": "Table 9"}, {"name": "Tommy", "table": "Table 10"}, {"name": "Sharon", "table": "Table 1"}, {"name": "Daniel", "table": "Table 2"}, {"name": "HT family", "table": "Table 3"}, {"name": "Julie K", "table": "Table 4"}, {"name": "Hannah", "table": "Table 5"}, {"name": "Elizabeth", "table": "Table 6"}, {"name": "Rachel", "table": "Table 7"}, {"name": "Emily", "table": "Table 8"}, {"name": "Rosie", "table": "Table 9"}, {"name": "Lily", "table": "Table 10"}, {"name": "Ronald", "table": "Table 1"}, {"name": "Marilyn", "table": "Table 2"}, {"name": "David", "table": "Table 3"}, {"name": "Kristen", "table": "Table 4"}, {"name": "Simon", "table": "Table 5"}, {"name": "Ivy", "table": "Table 6"}, {"name": "Juha", "table": "Table 7"}, {"name": "Yi", "table": "Table 8"}, {"name": "Martin", "table": "Table 9"}, {"name": "Hongbing", "table": "Table 10"}, {"name": "Fiona", "table": "Table 1"}, {"name": "Michael", "table": "Table 2"}, {"name": "Minhwa", "table": "Table 3"}, {"name": "Anna", "table": "Table 4"}, {"name": "Laura", "table": "Table 5"}, {"name": "Elysia", "table": "Table 6"}, {"name": "Adam", "table": "Table 7"}, {"name": "Elizabeth", "table": "Table 8"}, {"name": "Pearl", "table": "Table 9"}, {"name": "Jenny", "table": "Table 10"}, {"name": "May", "table": "Table 1"}, {"name": "Amy", "table": "Table 2"}, {"name": "Doowon", "table": "Table 3"}, {"name": "Grace", "table": "Table 4"}, {"name": "Asher", "table": "Table 5"}, {"name": "Tim C", "table": "Table 6"}, {"name": "Ethan", "table": "Table 7"}, {"name": "Lisa", "table": "Table 8"}, {"name": "Alex", "table": "Table 9"}, {"name": "Cindy X", "table": "Table 10"}, {"name": "Annie", "table": "Table 1"}, {"name": "Jack", "table": "Table 2"}, {"name": "Yejung", "table": "Table 3"}, {"name": "Dana K", "table": "Table 4"}, {"name": "Terry", "table": "Table 5"}, {"name": "Zion", "table": "Table 6"}, {"name": "Anna", "table": "Table 7"}, {"name": "Danial", "table": "Table 8"}, {"name": "Phoenix", "table": "Table 9"}, {"name": "Cathy", "table": "Table 10"}, {"name": "Chien-ya Weng", "table": "Table 1"}, {"name": "Lu", "table": "Table 2"}, {"name": "Evelyn", "table": "Table 3"}, {"name": "Joel", "table": "Table 4"}, {"name": "Christien", "table": "Table 5"}, {"name": "Celina", "table": "Table 6"}, {"name": "Narae", "table": "Table 7"}, {"name": "Aaron", "table": "Table 8"}, {"name": "Jairus", "table": "Table 9"}, {"name": "Karen", "table": "Table 10"}, {"name": "Yonggi", "table": "Table 1"}, {"name": "Baojiang", "table": "Table 2"}, {"name": "Chloe", "table": "Table 3"}, {"name": "Lana", "table": "Table 5"}, {"name": "Sing", "table": "Table 6"}, {"name": "Ivy", "table": "Table 7"}, {"name": "Kellie", "table": "Table 8"}, {"name": "Matheus", "table": "Table 9"}, {"name": "Sam Y", "table": "Table 10"}, {"name": "Sophie", "table": "Table 1"}, {"name": "Batsuuri", "table": "Table 3"}, {"name": "Seyah", "table": "Table 5"}, {"name": "Olympia", "table": "Table 6"}, {"name": "Alyssa", "table": "Table 7"}, {"name": "Daisy", "table": "Table 8"}, {"name": "Zayden", "table": "Table 9"}, {"name": "Young Wook", "table": "Table 1"}, {"name": "Yanis", "table": "Table 3"}, {"name": "Lyn", "table": "Table 5"}, {"name": "Jack", "table": "Table 6"}, {"name": "Alex", "table": "Table 7"}, {"name": "Imasha", "table": "Table 8"}, {"name": "Christine", "table": "Table 11"}, {"name": "Charles", "table": "Table 12"}, {"name": "Paul", "table": "Table 13"}, {"name": "Victor", "table": "Table 14"}, {"name": "Ingwon", "table": "Table 15"}, {"name": "Min Young", "table": "Table 16"}, {"name": "John Lee", "table": "Table 17"}, {"name": "Jinseop", "table": "Table 18"}, {"name": "Jaehyung", "table": "Table 19"}, {"name": "Yeon-Ho", "table": "Table 20"}, {"name": "Cheng", "table": "Table 11"}, {"name": "Susan", "table": "Table 12"}, {"name": "Julie L", "table": "Table 13"}, {"name": "Gumhee", "table": "Table 14"}, {"name": "Youlee", "table": "Table 15"}, {"name": "Samuel", "table": "Table 16"}, {"name": "Alex", "table": "Table 17"}, {"name": "Mihyun", "table": "Table 18"}, {"name": "Elvin", "table": "Table 19"}, {"name": "Joy", "table": "Table 20"}, {"name": "Ryan", "table": "Table 11"}, {"name": "Seth", "table": "Table 12"}, {"name": "Evangeline", "table": "Table 13"}, {"name": "Haim", "table": "Table 14"}, {"name": "Lisa", "table": "Table 15"}, {"name": "Joshua L", "table": "Table 16"}, {"name": "Enjae", "table": "Table 17"}, {"name": "Evan", "table": "Table 18"}, {"name": "Hara", "table": "Table 19"}, {"name": "Daniel C", "table": "Table 20"}, {"name": "Angela", "table": "Table 11"}, {"name": "Titus", "table": "Table 12"}, {"name": "Ezra", "table": "Table 13"}, {"name": "Taehyuk", "table": "Table 14"}, {"name": "Ryan", "table": "Table 15"}, {"name": "Soyoung", "table": "Table 16"}, {"name": "Enseo", "table": "Table 17"}, {"name": "Ria", "table": "Table 18"}, {"name": "Youkang", "table": "Table 19"}, {"name": "Anna", "table": "Table 20"}, {"name": "LED", "table": "Table 11"}, {"name": "Kin", "table": "Table 12"}, {"name": "Daniel H", "table": "Table 13"}, {"name": "Scarlett", "table": "Table 14"}, {"name": "JD", "table": "Table 15"}, {"name": "Jenny", "table": "Table 16"}, {"name": "Bryan", "table": "Table 17"}, {"name": "William", "table": "Table 18"}, {"name": "Yongsung", "table": "Table 19"}, {"name": "Pastor Joshua", "table": "Table 20"}, {"name": "Sylus", "table": "Table 11"}, {"name": "Miranda", "table": "Table 12"}, {"name": "Subin", "table": "Table 13"}, {"name": "Jane", "table": "Table 14"}, {"name": "Kana", "table": "Table 15"}, {"name": "Brian", "table": "Table 16"}, {"name": "Junghwan", "table": "Table 17"}, {"name": "Esther", "table": "Table 18"}, {"name": "Jiwoo", "table": "Table 19"}, {"name": "Yujin", "table": "Table 20"}, {"name": "Ying", "table": "Table 11"}, {"name": "Richard", "table": "Table 12"}, {"name": "Junwon", "table": "Table 13"}, {"name": "Noel", "table": "Table 14"}, {"name": "Arukah", "table": "Table 15"}, {"name": "Vicky", "table": "Table 16"}, {"name": "Mina", "table": "Table 17"}, {"name": "Willow", "table": "Table 18"}, {"name": "Rahab", "table": "Table 19"}, {"name": "Joel", "table": "Table 20"}, {"name": "Wei", "table": "Table 11"}, {"name": "Melody", "table": "Table 12"}, {"name": "Gona", "table": "Table 13"}, {"name": "Jihun", "table": "Table 14"}, {"name": "Eliana", "table": "Table 15"}, {"name": "Eliana", "table": "Table 16"}, {"name": "Jaehong", "table": "Table 17"}, {"name": "Aiden", "table": "Table 18"}, {"name": "Euntaek", "table": "Table 19"}, {"name": "Jumin", "table": "Table 20"}, {"name": "Cindy", "table": "Table 11"}, {"name": "Leon", "table": "Table 12"}, {"name": "Jeongmi", "table": "Table 13"}, {"name": "Hannah", "table": "Table 14"}, {"name": "Tim K", "table": "Table 15"}, {"name": "Danielle", "table": "Table 16"}, {"name": "Sue", "table": "Table 17"}, {"name": "Holim", "table": "Table 18"}, {"name": "Tom", "table": "Table 20"}, {"name": "Michaela", "table": "Table 11"}, {"name": "Nancy", "table": "Table 12"}, {"name": "Lucy J", "table": "Table 13"}, {"name": "Heizle", "table": "Table 14"}, {"name": "Stella", "table": "Table 15"}, {"name": "Luke", "table": "Table 17"}, {"name": "Miyun", "table": "Table 18"}, {"name": "Seojin", "table": "Table 20"}, {"name": "Gabriella", "table": "Table 11"}, {"name": "Jonathan", "table": "Table 12"}, {"name": "Joel", "table": "Table 14"}, {"name": "Enoch", "table": "Table 15"}, {"name": "Grace", "table": "Table 17"}, {"name": "Lydia", "table": "Table 18"}, {"name": "Harang", "table": "Table 20"}, {"name": "Katie", "table": "Table 12"}, {"name": "Sienna", "table": "Table 15"}, {"name": "Julie P", "table": "Table 17"}, {"name": "Hael", "table": "Table 18"}, {"name": "Jihoon L", "table": "Table 21"}, {"name": "Allen", "table": "Table 22"}, {"name": "James", "table": "Table 23"}, {"name": "Kit", "table": "Table 24"}, {"name": "Khoi", "table": "Table 25"}, {"name": "Nicole", "table": "Table 26"}, {"name": "Rachael", "table": "Table 27"}, {"name": "SJ", "table": "Table 28"}, {"name": "Mimi", "table": "Table 21"}, {"name": "Minji", "table": "Table 22"}, {"name": "Kat", "table": "Table 23"}, {"name": "Ryo", "table": "Table 24"}, {"name": "Melinda", "table": "Table 25"}, {"name": "Taylor", "table": "Table 26"}, {"name": "Henry", "table": "Table 27"}, {"name": "Dana", "table": "Table 28"}, {"name": "Seul", "table": "Table 21"}, {"name": "Woojin", "table": "Table 22"}, {"name": "Bendix", "table": "Table 23"}, {"name": "Jude", "table": "Table 24"}, {"name": "Lucy L", "table": "Table 25"}, {"name": "Gabriel", "table": "Table 26"}, {"name": "Devangee", "table": "Table 27"}, {"name": "John Lim", "table": "Table 28"}, {"name": "Inwook", "table": "Table 21"}, {"name": "Yuju", "table": "Table 22"}, {"name": "Brianna", "table": "Table 23"}, {"name": "Aderonke", "table": "Table 24"}, {"name": "Steven", "table": "Table 25"}, {"name": "Samantha", "table": "Table 26"}, {"name": "Krishna", "table": "Table 27"}, {"name": "David Lim", "table": "Table 28"}, {"name": "Soen", "table": "Table 21"}, {"name": "Haeun", "table": "Table 22"}, {"name": "Yanqin", "table": "Table 23"}, {"name": "Ayomide", "table": "Table 24"}, {"name": "Kate", "table": "Table 25"}, {"name": "Matilda", "table": "Table 26"}, {"name": "Chris", "table": "Table 27"}, {"name": "Eunice", "table": "Table 28"}, {"name": "Siwon", "table": "Table 21"}, {"name": "Sanghee", "table": "Table 22"}, {"name": "Zhujun", "table": "Table 23"}, {"name": "Ayodeji", "table": "Table 24"}, {"name": "Alexia", "table": "Table 25"}, {"name": "Bobby", "table": "Table 26"}, {"name": "Helen", "table": "Table 27"}, {"name": "Ara", "table": "Table 28"}, {"name": "JUOH", "table": "Table 21"}, {"name": "Dongjoo", "table": "Table 22"}, {"name": "James Z", "table": "Table 23"}, {"name": "Ben", "table": "Table 24"}, {"name": "Nash", "table": "Table 25"}, {"name": "Grace", "table": "Table 26"}, {"name": "John T", "table": "Table 27"}, {"name": "Anna", "table": "Table 28"}, {"name": "Seoyun", "table": "Table 21"}, {"name": "Jia", "table": "Table 22"}, {"name": "Tian", "table": "Table 23"}, {"name": "Emma", "table": "Table 24"}, {"name": "Claudia", "table": "Table 25"}, {"name": "Jesse", "table": "Table 26"}, {"name": "Russell", "table": "Table 27"}, {"name": "Andrew", "table": "Table 28"}, {"name": "Rohee", "table": "Table 21"}, {"name": "Yungil", "table": "Table 22"}, {"name": "Esther", "table": "Table 23"}, {"name": "Bing", "table": "Table 24"}, {"name": "Sam T", "table": "Table 25"}, {"name": "Ezekiel", "table": "Table 26"}, {"name": "Tsz Yan", "table": "Table 27"}, {"name": "Esther", "table": "Table 28"}, {"name": "Rohan", "table": "Table 21"}, {"name": "Hyejin Go", "table": "Table 22"}, {"name": "Emerald", "table": "Table 24"}, {"name": "Kimberley", "table": "Table 27"}, {"name": "Ha Yul", "table": "Table 28"}, {"name": "Minseo", "table": "Table 22"}, {"name": "Evan", "table": "Table 24"}, {"name": "David", "table": "Table 27"}, {"name": "Ha Na", "table": "Table 28"}, {"name": "Noah", "table": "Table 22"}, {"name": "Danica", "table": "Table 24"}, {"name": "12", "table": "Table 27"}, {"name": "kor", "table": "Table 28"}, {"name": "josh", "table": "Table 30"}, {"name": "Verrel", "table": "Table 21"}, {"name": "8", "table": "Table 27"}, {"name": "English", "table": "Table 28"}, {"name": "12korean", "table": "Table 30"}, {"name": "Ellie", "table": "Table 21"}, {"name": "4.5", "table": "Table 27"}, {"name": "chinese", "table": "Table 28"}, {"name": "Kusal", "table": "Table 21"}, {"name": "PPT", "table": "Table 30"}, {"name": "Thamesh", "table": "Table 21"}, {"name": "Mel", "table": "Table 21"}, {"name": "xiaoxue", "table": "Table 21"}];
+
+function render(query){
+  results.innerHTML = '';
+  const nq = normalize(query);
+  if(!nq){
+    hint.style.display = 'block';
+    document.getElementById('resultMapWrap').style.display = 'none';
+    return;
+  }
+  hint.style.display = 'none';
+
+  const matches = GUESTS.filter(g => normalize(g.name).includes(nq));
+
+  if(matches.length === 0){
+    results.innerHTML = `<div class="no-result">We couldn't find<br>"${escapeHtml(query)}"<br><br>Please check with our staff.</div>`;
+    document.getElementById('resultMapWrap').style.display = 'none';
+    return;
+  }
+
+  if(matches.length > 1){
+    const note = document.createElement('div');
+    note.className = 'multi-note';
+    note.textContent = `${matches.length} matches found — please confirm your name.`;
+    results.appendChild(note);
+  }
+
+  const shown = matches.slice(0, 8);
+  const isMultiple = shown.length > 1;
+  shown.forEach(g => {
+    const card = document.createElement('div');
+    card.className = 'card';
+    if(isMultiple) card.classList.add('selectable');
+    const tableNum = (g.table.match(/\d+/) || [''])[0];
+    card.innerHTML = `
+      <div class="card-name">${escapeHtml(g.name)}</div>
+      <div class="card-label">Your Table</div>
+      <div class="card-table">${tableNum}<span>Table</span></div>
+    `;
+    if(isMultiple){
+      card.addEventListener('click', () => selectMatch(g));
+    }
+    results.appendChild(card);
+  });
+
+  const highlightNums = shown.map(g => parseInt(g.table.match(/\d+/)[0], 10));
+  const mapWrap = document.getElementById('resultMapWrap');
+  document.getElementById('resultMap').innerHTML = buildFloorPlan(highlightNums);
+  mapWrap.style.display = 'block';
+
+  lastShownMatches = shown;
+}
+
+let lastShownMatches = [];
+
+function selectMatch(guest){
+  results.innerHTML = '';
+  const card = document.createElement('div');
+  card.className = 'card';
+  const tableNum = (guest.table.match(/\d+/) || [''])[0];
+  card.innerHTML = `
+    <div class="card-name">${escapeHtml(guest.name)}</div>
+    <div class="card-label">Your Table</div>
+    <div class="card-table">${tableNum}<span>Table</span></div>
+  `;
+  results.appendChild(card);
+
+  const backBtn = document.createElement('button');
+  backBtn.type = 'button';
+  backBtn.className = 'back-btn';
+  backBtn.textContent = '← Not me, go back';
+  backBtn.addEventListener('click', () => render(input.value));
+  results.appendChild(backBtn);
+
+  document.getElementById('resultMap').innerHTML = buildFloorPlan([parseInt(tableNum, 10)]);
+}
+
+function escapeHtml(s){
+  const d = document.createElement('div');
+  d.textContent = s;
+  return d.innerHTML;
+}
+
+// ---- Floor plan ----
+const FP_LAYOUT = [
+  {n:4, col:1, row:1}, {n:3, col:1, row:2}, {n:2, col:1, row:3}, {n:1, col:1, row:4},
+  {n:8, col:2, row:1}, {n:7, col:2, row:2}, {n:6, col:2, row:3}, {n:5, col:2, row:4},
+  {n:13, col:3, row:1}, {n:12, col:3, row:2}, {n:11, col:3, row:3}, {n:10, col:3, row:4}, {n:9, col:3, row:5},
+  {n:18, col:5, row:1}, {n:17, col:5, row:2}, {n:16, col:5, row:3}, {n:15, col:5, row:4}, {n:14, col:5, row:5},
+  {n:22, col:6, row:1}, {n:21, col:6, row:2}, {n:20, col:6, row:3}, {n:19, col:6, row:4},
+  {n:26, col:7, row:1}, {n:25, col:7, row:2}, {n:24, col:7, row:3}, {n:23, col:7, row:4},
+];
+const FP_EXTRA = [27, 28, 30];
+
+const allTableNums = new Set(GUESTS.map(g => parseInt(g.table.match(/\d+/)[0], 10)));
+
+function buildFloorPlan(highlightNums){
+  highlightNums = highlightNums || [];
+  let html = '';
+  FP_LAYOUT.forEach(t => {
+    const hl = highlightNums.includes(t.n) ? ' highlight' : '';
+    html += `<div class="fp-table${hl}" style="grid-column:${t.col};grid-row:${t.row}">${t.n}</div>`;
+  });
+  html += `<div class="fp-stage" style="grid-column:4;grid-row:2 / 5">stage</div>`;
+  html += `<div class="fp-podium" style="grid-column:4;grid-row:6">PowerPoint</div>`;
+  html += `<div class="fp-label" style="grid-column:3;grid-row:6 / 8">seating sign<br>(entrance)</div>`;
+  html += `<div class="fp-label" style="grid-column:5;grid-row:6">speaker</div>`;
+  html += `<div class="fp-label" style="grid-column:7;grid-row:6 / 8">seating sign<br>(entrance)</div>`;
+
+  let extraHtml = '';
+  FP_EXTRA.forEach(n => {
+    if(!allTableNums.has(n)) return;
+    const hl = highlightNums.includes(n) ? ' highlight' : '';
+    extraHtml += `<div class="fp-table${hl}">${n}</div>`;
+  });
+  if(extraHtml){
+    html += `<div class="fp-extra">${extraHtml}</div>`;
+  }
+  return html;
+}
+
+document.getElementById('overviewMap').innerHTML = buildFloorPlan();
+
+input.addEventListener('input', e => render(e.target.value));
+
+// Full alphabetical list
+const toggleBtn = document.getElementById('toggleList');
+const listWrap = document.getElementById('fullListWrap');
+const fullListEl = document.getElementById('fullList');
+const filterInput = document.getElementById('filterList');
+
+const sortedGuests = [...GUESTS].sort((a,b) => a.name.localeCompare(b.name, undefined, {sensitivity:'base'}));
+
+function renderFullList(filter){
+  const nf = normalize(filter || '');
+  fullListEl.innerHTML = '';
+  let lastLetter = '';
+  sortedGuests.forEach(g => {
+    if(nf && !normalize(g.name).includes(nf)) return;
+    const letter = g.name.trim().charAt(0).toUpperCase();
+    if(letter !== lastLetter){
+      lastLetter = letter;
+      const head = document.createElement('div');
+      head.className = 'letter-head';
+      head.textContent = letter;
+      fullListEl.appendChild(head);
+    }
+    const tableNum = (g.table.match(/\d+/) || [''])[0];
+    const row = document.createElement('div');
+    row.className = 'row';
+    row.innerHTML = `<span class="rn">${escapeHtml(g.name)}</span><span class="rt">Table ${tableNum}</span>`;
+    fullListEl.appendChild(row);
+  });
+  if(!fullListEl.innerHTML){
+    fullListEl.innerHTML = '<div class="row"><span class="rn">No matches</span></div>';
+  }
+}
+
+toggleBtn.addEventListener('click', () => {
+  const isOpen = listWrap.classList.toggle('open');
+  toggleBtn.textContent = isOpen ? 'Hide full list' : 'View full list';
+  if(isOpen && !fullListEl.innerHTML){
+    renderFullList('');
+  }
+});
+
+filterInput.addEventListener('input', e => renderFullList(e.target.value));
+
+// ---- Table click -> guest list overlay ----
+const tableOverlay = document.getElementById('tableOverlay');
+const tableOverlayTitle = document.getElementById('tableOverlayTitle');
+const tableOverlayList = document.getElementById('tableOverlayList');
+const tableOverlayBack = document.getElementById('tableOverlayBack');
+
+document.addEventListener('click', e => {
+  const cell = e.target.closest('.fp-table');
+  if(!cell) return;
+  const tableNum = parseInt(cell.textContent, 10);
+  if(isNaN(tableNum)) return;
+  openTableOverlay(tableNum);
+});
+
+function openTableOverlay(tableNum){
+  const guestsAtTable = GUESTS
+    .filter(g => parseInt(g.table.match(/\d+/)[0], 10) === tableNum)
+    .sort((a,b) => a.name.localeCompare(b.name, undefined, {sensitivity:'base'}));
+
+  tableOverlayTitle.textContent = `Table ${tableNum}`;
+  tableOverlayList.innerHTML = guestsAtTable.length
+    ? guestsAtTable.map(g => `<div class="table-guest-row">${escapeHtml(g.name)}</div>`).join('')
+    : '<div class="table-guest-row">No one assigned yet</div>';
+
+  tableOverlay.classList.add('open');
+}
+
+tableOverlayBack.addEventListener('click', () => {
+  tableOverlay.classList.remove('open');
+});
+tableOverlay.addEventListener('click', e => {
+  if(e.target === tableOverlay) tableOverlay.classList.remove('open');
+});
+</script>
+
+</body>
+</html>
