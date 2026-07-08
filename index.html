@@ -26,9 +26,7 @@
     min-height:100dvh; /* 모바일 브라우저 주소창 변화에 대응 (dynamic viewport height) */
     overflow-x:hidden;
     background:
-      url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Cg fill='none' stroke='%238A9A7E' stroke-width='1.1' stroke-linecap='round' opacity='0.4'%3E%3Cpath d='M18 185 C28 155 20 122 34 92 C42 74 54 62 64 46'/%3E%3Cellipse cx='28' cy='140' rx='10' ry='4.5' transform='rotate(-38 28 140)'/%3E%3Cellipse cx='34' cy='112' rx='10' ry='4.5' transform='rotate(-22 34 112)'/%3E%3Cellipse cx='44' cy='86' rx='9' ry='4' transform='rotate(6 44 86)'/%3E%3Cellipse cx='54' cy='64' rx='8' ry='3.5' transform='rotate(28 54 64)'/%3E%3Cellipse cx='62' cy='48' rx='6' ry='3' transform='rotate(46 62 48)'/%3E%3Cpath d='M182 15 C172 45 180 78 166 108 C158 126 146 138 136 154'/%3E%3Cellipse cx='172' cy='60' rx='10' ry='4.5' transform='rotate(38 172 60)'/%3E%3Cellipse cx='166' cy='88' rx='10' ry='4.5' transform='rotate(22 166 88)'/%3E%3Cellipse cx='156' cy='114' rx='9' ry='4' transform='rotate(-6 156 114)'/%3E%3Cellipse cx='146' cy='136' rx='8' ry='3.5' transform='rotate(-28 146 136)'/%3E%3Cellipse cx='138' cy='152' rx='6' ry='3' transform='rotate(-46 138 152)'/%3E%3C/g%3E%3C/svg%3E") repeat,
       radial-gradient(circle at 50% 0%, #FFFDF8 0%, var(--ivory) 55%, #F3ECDE 100%);
-    background-size: 220px 220px, cover;
     font-family:'Pretendard', -apple-system, sans-serif;
     color:var(--ink);
     display:flex;
@@ -36,8 +34,19 @@
     align-items:center;
     padding:48px 20px 80px;
   }
+  /* 스크롤에 따라 살짝 시차를 두고 움직이는 세이지 그린 잎가지 패턴 레이어 */
+  #bgPattern{
+    position:fixed;
+    top:-120px; left:0; right:0; bottom:-120px;
+    background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Cg fill='none' stroke='%238A9A7E' stroke-width='1.1' stroke-linecap='round' opacity='0.4'%3E%3Cpath d='M18 185 C28 155 20 122 34 92 C42 74 54 62 64 46'/%3E%3Cellipse cx='28' cy='140' rx='10' ry='4.5' transform='rotate(-38 28 140)'/%3E%3Cellipse cx='34' cy='112' rx='10' ry='4.5' transform='rotate(-22 34 112)'/%3E%3Cellipse cx='44' cy='86' rx='9' ry='4' transform='rotate(6 44 86)'/%3E%3Cellipse cx='54' cy='64' rx='8' ry='3.5' transform='rotate(28 54 64)'/%3E%3Cellipse cx='62' cy='48' rx='6' ry='3' transform='rotate(46 62 48)'/%3E%3Cpath d='M182 15 C172 45 180 78 166 108 C158 126 146 138 136 154'/%3E%3Cellipse cx='172' cy='60' rx='10' ry='4.5' transform='rotate(38 172 60)'/%3E%3Cellipse cx='166' cy='88' rx='10' ry='4.5' transform='rotate(22 166 88)'/%3E%3Cellipse cx='156' cy='114' rx='9' ry='4' transform='rotate(-6 156 114)'/%3E%3Cellipse cx='146' cy='136' rx='8' ry='3.5' transform='rotate(-28 146 136)'/%3E%3Cellipse cx='138' cy='152' rx='6' ry='3' transform='rotate(-46 138 152)'/%3E%3C/g%3E%3C/svg%3E");
+    background-repeat:repeat;
+    background-size:220px 220px;
+    z-index:0;
+    pointer-events:none;
+    will-change:transform;
+  }
   button{ touch-action:manipulation; } /* 더블탭 확대 지연 방지 */
-  .view{ width:100%; display:flex; flex-direction:column; align-items:center; transition:opacity .28s ease, transform .28s ease; }
+  .view{ width:100%; display:flex; flex-direction:column; align-items:center; transition:opacity .28s ease, transform .28s ease; position:relative; z-index:1; }
   .view.view-fade-out{ opacity:0; transform:translateY(8px); }
   .view.view-fade-in{ opacity:0; transform:translateY(8px); }
 
@@ -732,6 +741,7 @@
 </style>
 </head>
 <body>
+<div id="bgPattern" aria-hidden="true"></div>
 
 <!-- ======================= PROGRAM VIEW ======================= -->
 <div class="view" id="programView">
@@ -925,6 +935,23 @@ window.addEventListener('beforeunload', (e) => {
     e.returnValue = ''; // 브라우저가 표시하는 확인 문구는 커스텀 텍스트를 지원하지 않음 (Edge/Chrome 공통 제한)
   }
 });
+
+/* =================================================================
+   배경 잎가지 패턴 패럴랙스 — 스크롤에 따라 살짝 느리게 따라 움직임
+   ================================================================= */
+const bgPattern = document.getElementById('bgPattern');
+let bgTicking = false;
+function updateBgParallax(){
+  const offset = window.scrollY * 0.15; // 전경보다 느리게 움직이는 비율
+  bgPattern.style.transform = `translate3d(0, ${-offset}px, 0)`;
+  bgTicking = false;
+}
+window.addEventListener('scroll', () => {
+  if(!bgTicking){
+    requestAnimationFrame(updateBgParallax);
+    bgTicking = true;
+  }
+}, { passive:true });
 
 /* =================================================================
    VIEW SWITCHING (부드러운 전환 효과 포함)
