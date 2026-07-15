@@ -905,23 +905,6 @@
         <div class="lang-tabs" id="captionLangTabs"></div>
         <div class="caption-display" id="captionDisplay"></div>
       </div>
-
-      <!-- ▼▼▼ 프로토타입 전용 - 확정되면 이 블록 삭제 ▼▼▼ -->
-      <button type="button" class="edit-toggle-btn" id="fatherEditToggleBtn">수정하기 · Edit</button>
-      <div class="edit-wrap" id="fatherEditWrap" style="display:none;">
-        <div class="edit-hint" id="fatherEditHint">한 줄에 자막 하나씩 입력하세요. 같은 줄 번호끼리 두 언어가 짝지어집니다.<br>Enter one caption per line. The same line number pairs the two languages together.</div>
-        <div class="lang-edit-block">
-          <div class="lang-edit-label" id="fatherEditLabelA"></div>
-          <textarea class="lang-textarea" id="fatherEditAreaA"></textarea>
-        </div>
-        <div class="lang-edit-block">
-          <div class="lang-edit-label" id="fatherEditLabelB"></div>
-          <textarea class="lang-textarea" id="fatherEditAreaB"></textarea>
-        </div>
-        <button type="button" class="save-btn" id="fatherSaveBtn">저장 · Save</button>
-      </div>
-      <div class="save-status" id="fatherSaveStatus"></div>
-      <!-- ▲▲▲ 프로토타입 전용 끝 ▲▲▲ -->
     </div>
   </div>
 
@@ -1349,17 +1332,16 @@ const LANG_LABEL = { kr:'한국어', en:'ENGLISH', zh:'中文' };
 const LANG_CLASS = { kr:'', en:'en', zh:'zh' };
 
 const FATHER_SPEECH = [
-  { num:1, titleKr:"신랑의 아버지", titleEn:"Hyuntak's Father", titleZh:"新郎父亲", langs:["en","zh"], captions: [] },
+  { num:1, titleKr:"신랑의 아버지", titleEn:"Hyuntak's Father", titleZh:"新郎父亲", langs:["en","zh"], captions: [
+    { en:"Hello, I am Shin Hwan-gyu, the father of the groom, Shin Hyun-tak.", zh:"大家好，我是新郎申炫倬（Shin Hyun-tak）的父亲申桓圭（Shin Hwan-gyu）。" },
+    { en:"First, I would like to take this opportunity to express my deepest gratitude to all the guests who have attended the wedding of Kailun and Shin Hyun-tak. I also want to extend my sincere appreciation to Kailun's parents, who have raised her with so much love, devotion, and care, and to her siblings who have grown up alongside her.", zh:"首先，我想借此机会向光临今天婚礼现场的各位宾客表达由衷的感谢。同时，我更要向一直以来给予Kailun无限的爱、深切的关怀和精心的教导，让她茁壮成长的Kailun的父母，以及陪伴她一路走来的兄弟姐妹们，表示最崇高的敬意和谢意。" },
+    { en:"Kailun, when you visited us in Sejong, Korea, I was so filled with joy to see you stepping off the train that I almost collapsed right there on the platform. From visiting the sundaeguk (blood sausage soup) restaurant that Hyun-tak loves, to the scarf you gifted me, the Chinese food we shared, and our visit to the Royal Tombs—although the journey was short, the time we spent together was truly happy and precious. Thank you for sharing those moments with us, and thank you even more for becoming a part of my family. I wholeheartedly welcome you.", zh:"Kailun，当你为了看望我们而来到韩国世宗市时，当我在火车站看到你走下火车的那一刻，我心中充满了喜悦，甚至激动得差点在原地跌倒。我们一起去吃贤卓最喜欢的韩式血肠汤、你送我的围巾、一起品尝的中式料理、一起参观王陵的经历……虽然旅程短暂，但与你共度的时光非常快乐、幸福。谢谢你愿意和我们共享这些时光，更感谢你愿意成为我们家的一员，我真诚地欢迎你加入我们的大家庭。" },
+    { en:"Hyun-tak, you have now become the head of a household. Seeing how you have endlessly loved and cared for your sick younger brother, and how you have sacrificed yourself to look after him despite your own hardships and inner scars—as a father, I am deeply grateful to you. More than anything, I want to express my infinite gratitude to you, the son I admire above all else.", zh:"贤卓啊，你现在已经成为了一家之主，需要肩负起经营家庭的责任了。回想过去，你不仅给予了生病的弟弟无尽的关爱和照顾，即便自己内心也很辛苦、受过伤，但你始终默默牺牲，用无限的爱呵护着家人。作为父亲，我非常感谢你，不仅为你感到骄傲，更对你那种温暖的内心充满敬意，我向最优秀的你致以深切的感谢。" },
+    { en:"From this moment on, Kailun and Hyun-tak, you are husband and wife. I hope you will live your lives practicing gratitude, respect, courtesy, trust, and love toward one another. If you remain each other's greatest ally, as you are today, I believe that any hardship you face will pass like a gentle breeze. Following the virtue of \"父子有亲\" (the intimacy between father and son) from the Mencius, and the Ten Commandments which teach us to honor our parents, I hope you will both do your very best for your parents and siblings who are in Australia.", zh:"从今天这一刻起，Kailun和贤卓你们就是夫妻了。希望你们在未来的生活中，能够始终践行感恩、尊重、礼貌、信任与爱。我相信，只要你们像今天这样始终站在对方的立场上，相互扶持，无论遇到怎样的艰难困苦，都能像清风一般轻松化解。正如中国《孟子·滕文公上》中所提到的\"父子有亲\"的德行，以及基督教十诫中\"孝敬父母\"的诫命，希望你们以后对待在澳洲的父母和兄弟姐妹们，也一定要尽心尽力。" },
+    { en:"Lastly, I wish all the guests attending this wedding happiness, health, and a life filled with love. I pray that Hyun-tak and Kailun will build a happy family (including the grandchildren to come) based on mutual respect and consideration, and live beautifully forever. Thank you, everyone.", zh:"最后，祝福今天出席婚礼的所有宾客，愿幸福、健康与爱永远伴随着大家。祝福贤卓和Kailun，愿你们以相互尊重和关怀之心，建立一个幸福的家庭（包括未来出生的孙子、孙女），愿你们永远美满、幸福地生活下去。谢谢大家！" }
+  ] },
   { num:2, titleKr:"신부의 아버지", titleEn:"Kailun's Father",  titleZh:"新娘父亲", langs:["kr","en"], captions: [] }
 ];
-
-// -- 프로토타입 전용: localStorage에 저장된 자막이 있으면 불러오기 (확정되면 삭제) --
-FATHER_SPEECH.forEach(item => {
-  try{
-    const saved = localStorage.getItem(`father-captions-${item.num}`);
-    if(saved) item.captions = JSON.parse(saved);
-  }catch(e){ /* ignore */ }
-});
 
 const fatherListEl = document.getElementById('fatherList');
 FATHER_SPEECH.forEach(item => {
@@ -1381,35 +1363,11 @@ FATHER_SPEECH.forEach(item => {
 const fatherSheetOverlay = document.getElementById('fatherSheetOverlay');
 const fatherSheetEyebrow = document.getElementById('fatherSheetEyebrow');
 const fatherSheetTitle = document.getElementById('fatherSheetTitle');
-const captionViewWrap = document.getElementById('captionViewWrap');
 const captionLangTabs = document.getElementById('captionLangTabs');
 const captionDisplay = document.getElementById('captionDisplay');
-const fatherEditToggleBtn = document.getElementById('fatherEditToggleBtn');
-const fatherEditWrap = document.getElementById('fatherEditWrap');
-const fatherEditLabelA = document.getElementById('fatherEditLabelA');
-const fatherEditLabelB = document.getElementById('fatherEditLabelB');
-const fatherEditAreaA = document.getElementById('fatherEditAreaA');
-const fatherEditAreaB = document.getElementById('fatherEditAreaB');
-const fatherSaveBtn = document.getElementById('fatherSaveBtn');
-const fatherSaveStatus = document.getElementById('fatherSaveStatus');
 
 let currentFatherItem = null;
 let currentLangIndex = 0;
-
-function closeFatherEditWrap(){
-  fatherEditWrap.style.display = 'none';
-  captionViewWrap.style.display = 'block';
-  fatherEditToggleBtn.textContent = '수정하기 · Edit';
-  hasUnsavedChanges = false;
-}
-
-function fillFatherEditAreas(item){
-  // 이전에 저장된 자막을 언어별로 그대로 이어받아 계속 수정할 수 있도록 채워넣기
-  fatherEditLabelA.textContent = LANG_LABEL[item.langs[0]];
-  fatherEditLabelB.textContent = LANG_LABEL[item.langs[1]];
-  fatherEditAreaA.value = item.captions.map(c => c[item.langs[0]] || '').join('\n');
-  fatherEditAreaB.value = item.captions.map(c => c[item.langs[1]] || '').join('\n');
-}
 
 function openFatherSheet(item){
   currentFatherItem = item;
@@ -1417,27 +1375,10 @@ function openFatherSheet(item){
   fatherSheetEyebrow.textContent = `${String(item.num).padStart(2,'0')} · ${item.titleKr} · ${item.titleZh}`;
   fatherSheetTitle.textContent = item.titleEn;
 
-  fillFatherEditAreas(item);
-
   renderLangTabs();
   renderCaption();
-  closeFatherEditWrap();
   fatherSheetOverlay.classList.add('open');
 }
-
-// -- 프로토타입 전용: 수정하기 버튼 -- 아버지별로 이전에 저장된 내용을 언어별로 그대로 불러와 그 자리에서 바로 수정 --
-fatherEditToggleBtn.addEventListener('click', () => {
-  if(!currentFatherItem) return;
-  const isOpen = fatherEditWrap.style.display !== 'none';
-  if(isOpen){
-    closeFatherEditWrap();
-  } else {
-    fillFatherEditAreas(currentFatherItem);
-    captionViewWrap.style.display = 'none';
-    fatherEditWrap.style.display = 'block';
-    fatherEditToggleBtn.textContent = '닫기 · Close';
-  }
-});
 
 // 언어별로 페이지를 나눠서 보여주는 탭 (한 페이지에는 한 언어만)
 function renderLangTabs(){
@@ -1470,41 +1411,6 @@ function renderCaption(){
     </div>
   `).join('');
 }
-
-fatherEditAreaA.addEventListener('input', () => { hasUnsavedChanges = true; });
-fatherEditAreaB.addEventListener('input', () => { hasUnsavedChanges = true; });
-
-// -- 프로토타입 전용: 저장 버튼 (확정되면 이 블록과 위 textarea/버튼 삭제) --
-fatherSaveBtn.addEventListener('click', () => {
-  const item = currentFatherItem;
-  if(!item) return;
-
-  let linesA = fatherEditAreaA.value.split('\n').map(s => s.trim());
-  let linesB = fatherEditAreaB.value.split('\n').map(s => s.trim());
-  let total = Math.max(linesA.length, linesB.length);
-  // 두 줄이 모두 빈 값인 마지막 줄들은 제거 (끝에 남은 빈 줄 정리)
-  while(total > 0 && (linesA[total - 1] || '') === '' && (linesB[total - 1] || '') === ''){
-    total--;
-  }
-
-  const captions = [];
-  for(let i = 0; i < total; i++){
-    const obj = {};
-    obj[item.langs[0]] = linesA[i] || '';
-    obj[item.langs[1]] = linesB[i] || '';
-    captions.push(obj);
-  }
-
-  item.captions = captions;
-  try{
-    localStorage.setItem(`father-captions-${item.num}`, JSON.stringify(captions));
-  }catch(e){ /* ignore */ }
-  hasUnsavedChanges = false;
-  renderCaption();
-  closeFatherEditWrap();
-  fatherSaveStatus.textContent = '저장되었습니다 · Saved';
-  setTimeout(() => { fatherSaveStatus.textContent = ''; }, 2000);
-});
 
 document.getElementById('fatherSheetBackBtn').addEventListener('click', () => {
   // 이 화면(자막 시트)의 실제 이전 화면은 메인 메뉴가 아니라 아버지 목록(fatherView)이므로
