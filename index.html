@@ -601,6 +601,39 @@
     background:#EFE9DA;
     margin:20px 0;
   }
+  .step-list{
+    list-style:none;
+    margin:0;
+    padding:0;
+    counter-reset:step;
+  }
+  .step-list li{
+    position:relative;
+    padding:2px 0 18px 32px;
+    font-size:15px;
+    line-height:1.7;
+    color:#4a4335;
+  }
+  .step-list li:last-child{ padding-bottom:0; }
+  .step-list li::before{
+    counter-increment:step;
+    content:counter(step);
+    position:absolute;
+    left:0; top:2px;
+    width:20px; height:20px;
+    border-radius:50%;
+    background:var(--gold-soft);
+    color:#6b5e45;
+    font-size:11px;
+    font-weight:600;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+  }
+  .lang-block.mini{ margin-bottom:10px; }
+  .lang-block.mini:last-child{ margin-bottom:0; }
+  .lang-block.mini .lang-tag{ margin-bottom:5px; }
+  .lang-block.mini .lang-text{ font-size:13.5px; line-height:1.6; }
   .group-sheet-title-zh{
     font-size:13px;
     color:#b3a98f;
@@ -728,7 +761,37 @@
     min-height:140px;
     display:flex;
     flex-direction:column;
-    justify-content:center;
+    justify-content:flex-start;
+  }
+  .caption-line{ margin-bottom:22px; }
+  .caption-line:last-child{ margin-bottom:0; }
+  .caption-line + .caption-line{
+    padding-top:22px;
+    border-top:1px solid #EFE9DA;
+  }
+  .lang-tabs{
+    display:flex;
+    gap:8px;
+    margin-bottom:16px;
+  }
+  .lang-tab-btn{
+    flex:1;
+    background:#fff;
+    border:1px solid var(--line);
+    color:#9c9181;
+    font-family:'Pretendard', sans-serif;
+    font-size:12.5px;
+    font-weight:600;
+    letter-spacing:0.08em;
+    padding:10px 12px;
+    cursor:pointer;
+    transition:border-color .2s, color .2s, background .2s;
+  }
+  .lang-tab-btn:hover{ color:var(--gold); border-color:var(--gold); }
+  .lang-tab-btn.active{
+    background:var(--gold);
+    border-color:var(--gold);
+    color:#fff;
   }
   .caption-empty{
     text-align:center;
@@ -839,12 +902,8 @@
       <div class="sheet-title" id="fatherSheetTitle"></div>
 
       <div id="captionViewWrap">
+        <div class="lang-tabs" id="captionLangTabs"></div>
         <div class="caption-display" id="captionDisplay"></div>
-        <div class="caption-nav">
-          <button type="button" class="nav-btn" id="captionPrevBtn">‹ Prev</button>
-          <span class="caption-counter" id="captionCounter"></span>
-          <button type="button" class="nav-btn" id="captionNextBtn">Next ›</button>
-        </div>
       </div>
 
       <!-- ▼▼▼ 프로토타입 전용 - 확정되면 이 블록 삭제 ▼▼▼ -->
@@ -875,29 +934,52 @@
 
   <div class="ornament"></div>
   <div class="eyebrow">Game Time</div>
-  <h1>Game</h1>
-  <p class="sub">질문을 하나씩 확인하세요<br>One question at a time</p>
+  <h1>Games</h1>
+  <p class="sub">게임을 눌러 방법을 확인하세요<br>Tap a game to see how to play</p>
 
-  <div class="game-wrap" id="gameViewWrap">
-    <div class="caption-display" id="gameQuestionDisplay"></div>
-    <div class="caption-nav">
-      <button type="button" class="nav-btn" id="gamePrevBtn">‹ Prev</button>
-      <span class="caption-counter" id="gameCounter"></span>
-      <button type="button" class="nav-btn" id="gameNextBtn">Next ›</button>
+  <div class="list" id="gameList"></div>
+
+  <footer>Thank you for celebrating with us</footer>
+
+  <div id="gameSheetOverlay" class="sheet-overlay">
+    <div class="sheet">
+      <div class="sheet-handle"></div>
+      <button type="button" class="back-btn" id="gameSheetBackBtn">← Back</button>
+      <div class="sheet-eyebrow" id="gameSheetEyebrow"></div>
+      <div class="sheet-title" id="gameSheetTitle"></div>
+
+      <div class="lang-block">
+        <div class="lang-tag">HOW TO PLAY</div>
+        <div class="lang-text" id="gameSheetSteps"></div>
+      </div>
+
+      <div id="gameSheetQuestionsWrap" style="display:none;">
+        <div class="divider"></div>
+        <button type="button" class="save-btn" id="gameSheetQuestionsBtn">질문 보기 · View Questions</button>
+      </div>
+
+      <div id="gameSheetLinkWrap" style="display:none;">
+        <div class="divider"></div>
+        <a id="gameSheetLink" href="#" target="_blank" rel="noopener" class="save-btn" style="text-align:center; text-decoration:none;">Open Quiz Link</a>
+      </div>
     </div>
   </div>
 
-  <!-- ▼▼▼ 프로토타입 전용 - 확정되면 이 블록 삭제 ▼▼▼ -->
-  <button type="button" class="edit-toggle-btn game-wrap" id="gameEditToggleBtn">수정하기 · Edit</button>
-  <div class="edit-wrap game-wrap" id="gameEditWrap" style="display:none;">
-    <div class="edit-hint">한 줄에 질문 하나씩 입력하세요<br>Enter one question per line</div>
-    <textarea class="lang-textarea" id="gameEditArea"></textarea>
-    <button type="button" class="save-btn" id="gameSaveBtn">저장 · Save</button>
-  </div>
-  <div class="save-status game-wrap" id="gameSaveStatus"></div>
-  <!-- ▲▲▲ 프로토타입 전용 끝 ▲▲▲ -->
+  <div id="questionsOverlay" class="sheet-overlay">
+    <div class="sheet">
+      <div class="sheet-handle"></div>
+      <button type="button" class="back-btn" id="questionsBackBtn">← Back</button>
+      <div class="sheet-eyebrow" id="questionsEyebrow"></div>
+      <div class="sheet-title" id="questionsTitle"></div>
 
-  <footer>Thank you for celebrating with us</footer>
+      <div class="caption-display" id="questionDisplay"></div>
+      <div class="caption-nav">
+        <button type="button" class="nav-btn" id="questionPrevBtn">‹ Prev</button>
+        <span class="caption-counter" id="questionCounter"></span>
+        <button type="button" class="nav-btn" id="questionNextBtn">Next ›</button>
+      </div>
+    </div>
+  </div>
 
 </div>
 
@@ -1034,6 +1116,15 @@ document.getElementById('gameToMainBtn').addEventListener('click', showProgram);
 const PROGRAM = [
   {
     num: 1,
+    titleEn: "Wedding Ceremony",
+    titleKr: "예식",
+    titleZh: "婚礼仪式",
+    kr: "신랑 신부의 예식이 진행됩니다. 두 사람의 새로운 시작을 함께 축복해 주세요.",
+    en: "The wedding ceremony begins. Please join us in celebrating the couple's new beginning.",
+    zh: "婚礼仪式即将开始，请与我们一同祝福新人展开新的人生篇章。"
+  },
+  {
+    num: 2,
     titleEn: "Group Photo",
     titleKr: "단체 사진 촬영",
     titleZh: "团体合影",
@@ -1043,14 +1134,14 @@ const PROGRAM = [
     zh: "这是与所有宾客一起拍摄集体照的时间，请按照工作人员的指引前往指定地点。"
   },
   {
-    num: 2,
+    num: 3,
     titleEn: "Dinner Seating",
     titleKr: "착석 안내",
     titleZh: "入座引导",
     link: "seating"
   },
   {
-    num: 3,
+    num: 4,
     titleEn: "Dinner Time",
     titleKr: "만찬 시간",
     titleZh: "晚宴时间",
@@ -1059,7 +1150,7 @@ const PROGRAM = [
     zh: "请享用美味的晚餐，并与身边的宾客愉快交谈。"
   },
   {
-    num: 4,
+    num: 5,
     titleEn: "First Dance",
     titleKr: "첫 춤",
     titleZh: "首舞",
@@ -1068,7 +1159,7 @@ const PROGRAM = [
     zh: "新郎新娘将进行他们的第一支舞，请为两人送上热烈的掌声与祝福。"
   },
   {
-    num: 5,
+    num: 6,
     titleEn: "Father's Speech",
     titleKr: "아버지의 축사",
     titleZh: "父亲致辞",
@@ -1078,7 +1169,7 @@ const PROGRAM = [
     zh: "新娘的父亲将为新人送上温暖的祝福致辞。"
   },
   {
-    num: 6,
+    num: 7,
     titleEn: "Game",
     titleKr: "게임 시간",
     titleZh: "游戏时间",
@@ -1088,7 +1179,7 @@ const PROGRAM = [
     zh: "与宾客们一起进行有趣的游戏时间，欢迎大家踊跃参与！"
   },
   {
-    num: 7,
+    num: 8,
     titleEn: "Finale",
     titleKr: "피날레",
     titleZh: "压轴环节",
@@ -1137,7 +1228,7 @@ const GROUPS = [
   { num:6,  titleKr:"한국2조",       titleEn:"Kor2",                titleZh:"韩语2组",      members: [] },
   { num:7,  titleKr:"영어2조",       titleEn:"Eng2",                titleZh:"英语2组",      members: [] },
   { num:8,  titleKr:"해외에서 오신 손님 1", titleEn:"People from abroad 1", titleZh:"海外来宾1", members: [] },
-  { num:9,  titleKr:"해외에서 오신 손님 2", titleEn:"From abroad 2",       titleZh:"海外来宾2", members: [] },
+  { num:9,  titleKr:"해외에서 오신 손님 2", titleEn:"People from abroad 2", titleZh:"海外来宾2", members: [] },
   { num:10, titleKr:"케일런 직장 동료", titleEn:"Evolution",         titleZh:"凯伦同事（Evolution）", members: [] }
 ];
 
@@ -1291,10 +1382,8 @@ const fatherSheetOverlay = document.getElementById('fatherSheetOverlay');
 const fatherSheetEyebrow = document.getElementById('fatherSheetEyebrow');
 const fatherSheetTitle = document.getElementById('fatherSheetTitle');
 const captionViewWrap = document.getElementById('captionViewWrap');
+const captionLangTabs = document.getElementById('captionLangTabs');
 const captionDisplay = document.getElementById('captionDisplay');
-const captionCounter = document.getElementById('captionCounter');
-const captionPrevBtn = document.getElementById('captionPrevBtn');
-const captionNextBtn = document.getElementById('captionNextBtn');
 const fatherEditToggleBtn = document.getElementById('fatherEditToggleBtn');
 const fatherEditWrap = document.getElementById('fatherEditWrap');
 const fatherEditLabelA = document.getElementById('fatherEditLabelA');
@@ -1305,7 +1394,7 @@ const fatherSaveBtn = document.getElementById('fatherSaveBtn');
 const fatherSaveStatus = document.getElementById('fatherSaveStatus');
 
 let currentFatherItem = null;
-let captionIndex = 0;
+let currentLangIndex = 0;
 
 function closeFatherEditWrap(){
   fatherEditWrap.style.display = 'none';
@@ -1324,12 +1413,13 @@ function fillFatherEditAreas(item){
 
 function openFatherSheet(item){
   currentFatherItem = item;
-  captionIndex = 0;
+  currentLangIndex = 0;
   fatherSheetEyebrow.textContent = `${String(item.num).padStart(2,'0')} · ${item.titleKr} · ${item.titleZh}`;
   fatherSheetTitle.textContent = item.titleEn;
 
   fillFatherEditAreas(item);
 
+  renderLangTabs();
   renderCaption();
   closeFatherEditWrap();
   fatherSheetOverlay.classList.add('open');
@@ -1349,34 +1439,37 @@ fatherEditToggleBtn.addEventListener('click', () => {
   }
 });
 
+// 언어별로 페이지를 나눠서 보여주는 탭 (한 페이지에는 한 언어만)
+function renderLangTabs(){
+  const item = currentFatherItem;
+  captionLangTabs.innerHTML = item.langs.map((l, i) => `
+    <button type="button" class="lang-tab-btn ${i === currentLangIndex ? 'active' : ''}" data-lang-index="${i}">${LANG_LABEL[l]}</button>
+  `).join('');
+  captionLangTabs.querySelectorAll('.lang-tab-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      currentLangIndex = parseInt(btn.dataset.langIndex, 10);
+      renderLangTabs();
+      renderCaption();
+    });
+  });
+}
+
+// 선택된 한 언어의 전체 자막을 위아래 스크롤로 볼 수 있게 표시
 function renderCaption(){
   const item = currentFatherItem;
   const total = item.captions.length;
   if(total === 0){
     captionDisplay.innerHTML = `<div class="caption-empty">아직 자막이 없습니다<br>No captions yet</div>`;
-    captionCounter.textContent = '0 / 0';
-    captionPrevBtn.disabled = true;
-    captionNextBtn.disabled = true;
     return;
   }
-  if(captionIndex < 0) captionIndex = 0;
-  if(captionIndex > total - 1) captionIndex = total - 1;
 
-  const c = item.captions[captionIndex];
-  captionDisplay.innerHTML = item.langs.map(l => `
-    <div class="lang-block">
-      <span class="lang-tag ${LANG_CLASS[l]}">${LANG_LABEL[l]}</span>
+  const l = item.langs[currentLangIndex];
+  captionDisplay.innerHTML = item.captions.map(c => `
+    <div class="caption-line">
       <div class="lang-text">${c[l] || ''}</div>
     </div>
   `).join('');
-
-  captionCounter.textContent = `${captionIndex + 1} / ${total}`;
-  captionPrevBtn.disabled = captionIndex === 0;
-  captionNextBtn.disabled = captionIndex === total - 1;
 }
-
-captionPrevBtn.addEventListener('click', () => { captionIndex--; renderCaption(); });
-captionNextBtn.addEventListener('click', () => { captionIndex++; renderCaption(); });
 
 fatherEditAreaA.addEventListener('input', () => { hasUnsavedChanges = true; });
 fatherEditAreaB.addEventListener('input', () => { hasUnsavedChanges = true; });
@@ -1407,7 +1500,6 @@ fatherSaveBtn.addEventListener('click', () => {
     localStorage.setItem(`father-captions-${item.num}`, JSON.stringify(captions));
   }catch(e){ /* ignore */ }
   hasUnsavedChanges = false;
-  captionIndex = 0;
   renderCaption();
   closeFatherEditWrap();
   fatherSaveStatus.textContent = '저장되었습니다 · Saved';
@@ -1424,99 +1516,177 @@ fatherSheetOverlay.addEventListener('click', e => {
 });
 
 /* =================================================================
-   GAME — 청중에게 물어볼 질문을 하나씩 보여주는 화면
-   아직 게임 방식이 정해지지 않아, 우선 질문 목록을 하나씩
-   넘겨보는 형태로 구성 (아래 QUESTIONS 배열을 수정하거나
-   "수정하기" 버튼으로 편집 가능, 프로토타입)
+   GAMES (게임) — 아래 games 배열의 내용을 자유롭게 수정하세요.
+   각 게임을 누르면 "How to Play" 안내가 담긴 시트가 열립니다.
+   link가 있는 게임은 시트 하단에 외부 링크 버튼이 함께 표시됩니다.
    ================================================================= */
-let GAME_QUESTIONS = [
-  "신랑과 신부가 처음 만난 곳은 어디일까요? | Where did the couple first meet?",
-  "두 사람이 사귄 지 얼마나 되었을까요? | How long have they been dating?",
-  "신랑이 프로포즈한 장소는 어디일까요? | Where did the groom propose?",
-  "신랑 신부의 공통 취미는 무엇일까요? | What hobby do they share?"
+const GAMES = [
+  {
+    num: 1,
+    titleEn: "Shoe Game",
+    titleKr: "신발 게임",
+    titleZh: "鞋子游戏",
+    emoji: "❤️",
+    steps: [
+      { kr: "신랑 신부가 등을 맞대고 앉아 각자 자신의 신발 한 짝과 상대방의 신발 한 짝을 듭니다.", en: "The bride and groom each hold one of their own shoes and one of their partner's while sitting back-to-back.", zh: "新郎新娘背对背坐着，各自拿着自己的一只鞋和对方的一只鞋。" },
+      { kr: "매 라운드마다 질문이 주어집니다.", en: "A question will be asked each round.", zh: "每一轮都会提出一个问题。" },
+      { kr: "두 사람은 정답에 더 가깝다고 생각하는 사람의 신발을 들어 올립니다.", en: "They raise the shoe of the person who best matches the answer.", zh: "两人举起他们认为更符合答案的那个人的鞋子。" }
+    ],
+    // 아래 질문은 예시입니다. 실제 질문이 정해지면 이 목록만 바꿔주세요.
+    // These are placeholder questions — just edit this list once the real ones are decided.
+    questions: [
+      { kr: "누가 첫눈에 반했을까요?", en: "Who fell in love at first sight?", zh: "谁对谁一见钟情？" },
+      { kr: "잠버릇이 더 심한 사람은 누구일까요?", en: "Who has worse sleeping habits?", zh: "谁的睡觉习惯更差？" },
+      { kr: "돈 관리를 더 잘하는 사람은 누구일까요?", en: "Who manages money better?", zh: "谁更擅长理财？" },
+      { kr: "집안일을 더 많이 하는 사람은 누구일까요?", en: "Who does more housework?", zh: "谁做更多家务？" },
+      { kr: "먼저 사과하는 사람은 누구일까요?", en: "Who apologizes first after a fight?", zh: "吵架后谁先道歉？" },
+      { kr: "10년 후 더 많이 변할 사람은 누구일까요?", en: "Who will change more in 10 years?", zh: "十年后谁的变化会更大？" }
+    ]
+  },
+  {
+    num: 2,
+    titleEn: "Bring Me Challenge",
+    titleKr: "브링미 챌린지",
+    titleZh: "寻物挑战",
+    emoji: "🏃",
+    steps: [
+      { kr: "10명이 방 안에서 요청된 물건을 찾기 위해 경주합니다.", en: "10 people will race to find the requested item somewhere in the room.", zh: "10位参赛者将在场内寻找指定物品并展开竞速。" },
+      { kr: "찾은 물건을 최대한 빨리 앞으로 가져옵니다.", en: "Bring it to the front as quickly as you can.", zh: "尽快把物品带到前面。" },
+      { kr: "매 라운드마다 가장 늦게 돌아온 사람이 탈락합니다.", en: "The last person back each round is eliminated.", zh: "每一轮最后回来的人将被淘汰。" },
+      { kr: "물건을 빌리기 전에 반드시 허락을 구해주세요.", en: "Please ask permission before borrowing any item.", zh: "借用物品前请务必先征得同意。" }
+    ]
+  },
+  {
+    num: 3,
+    titleEn: "Josh & Kailun: Their Story",
+    titleKr: "조쉬 & 케일런: 그들의 이야기",
+    titleZh: "乔什与凯伦的故事",
+    emoji: "🧠",
+    steps: [
+      { kr: "아래 링크를 눌러주세요.", en: "Press the link below.", zh: "请点击下方链接。" },
+      { kr: "6개의 질문에 퀴즈 형식으로 답해주세요.", en: "Answer the 6 questions in a quiz format.", zh: "以问答形式回答这6个问题。" },
+      { kr: "가장 높은 점수를 받은 사람이 우승합니다!", en: "The highest score wins!", zh: "得分最高者获胜！" }
+    ],
+    link: "https://www.menti.com/al4svdmth2uy"
+  }
 ];
 
-try{
-  const savedQuestions = localStorage.getItem('game-questions');
-  if(savedQuestions) GAME_QUESTIONS = JSON.parse(savedQuestions);
-}catch(e){ /* ignore */ }
+const gameListEl = document.getElementById('gameList');
+GAMES.forEach(g => {
+  const el = document.createElement('div');
+  el.className = 'item';
+  el.innerHTML = `
+    <div class="item-num">${g.emoji}</div>
+    <div class="item-text">
+      <div class="item-title">${g.titleEn}</div>
+      <div class="item-kr">${g.titleKr}</div>
+      <div class="item-zh">${g.titleZh}</div>
+    </div>
+    <div class="item-arrow">›</div>
+  `;
+  el.addEventListener('click', () => openGameSheet(g));
+  gameListEl.appendChild(el);
+});
 
-const gameQuestionDisplay = document.getElementById('gameQuestionDisplay');
-const gameCounter = document.getElementById('gameCounter');
-const gamePrevBtn = document.getElementById('gamePrevBtn');
-const gameNextBtn = document.getElementById('gameNextBtn');
-const gameEditToggleBtn = document.getElementById('gameEditToggleBtn');
-const gameEditWrap = document.getElementById('gameEditWrap');
-const gameEditArea = document.getElementById('gameEditArea');
-const gameSaveBtn = document.getElementById('gameSaveBtn');
-const gameSaveStatus = document.getElementById('gameSaveStatus');
-const gameViewWrap = document.getElementById('gameViewWrap');
+const gameSheetOverlay = document.getElementById('gameSheetOverlay');
+const gameSheetEyebrow = document.getElementById('gameSheetEyebrow');
+const gameSheetTitle = document.getElementById('gameSheetTitle');
+const gameSheetSteps = document.getElementById('gameSheetSteps');
+const gameSheetLinkWrap = document.getElementById('gameSheetLinkWrap');
+const gameSheetLink = document.getElementById('gameSheetLink');
 
-let gameIndex = 0;
+function openGameSheet(g){
+  gameSheetEyebrow.textContent = `${String(g.num).padStart(2,'0')} · ${g.titleKr} · ${g.titleZh}`;
+  gameSheetTitle.textContent = g.titleEn;
+  gameSheetSteps.innerHTML = `<ol class="step-list">${g.steps.map(s => `
+    <li>
+      <div class="lang-block mini"><span class="lang-tag">한국어</span><div class="lang-text">${escapeHtml(s.kr)}</div></div>
+      <div class="lang-block mini"><span class="lang-tag en">ENGLISH</span><div class="lang-text">${escapeHtml(s.en)}</div></div>
+      <div class="lang-block mini"><span class="lang-tag zh">中文</span><div class="lang-text">${escapeHtml(s.zh)}</div></div>
+    </li>
+  `).join('')}</ol>`;
 
-function renderGameQuestion(){
-  const total = GAME_QUESTIONS.length;
+  if(g.link){
+    gameSheetLink.href = g.link;
+    gameSheetLinkWrap.style.display = 'block';
+  } else {
+    gameSheetLinkWrap.style.display = 'none';
+  }
+
+  if(g.questions && g.questions.length){
+    gameSheetQuestionsWrap.style.display = 'block';
+    gameSheetQuestionsBtn.onclick = () => openQuestionsOverlay(g);
+  } else {
+    gameSheetQuestionsWrap.style.display = 'none';
+  }
+
+  gameSheetOverlay.classList.add('open');
+}
+
+document.getElementById('gameSheetBackBtn').addEventListener('click', () => {
+  gameSheetOverlay.classList.remove('open');
+});
+gameSheetOverlay.addEventListener('click', e => {
+  if(e.target === gameSheetOverlay) gameSheetOverlay.classList.remove('open');
+});
+
+const gameSheetQuestionsWrap = document.getElementById('gameSheetQuestionsWrap');
+const gameSheetQuestionsBtn = document.getElementById('gameSheetQuestionsBtn');
+
+/* -- 질문 하나씩 넘겨보기 (Shoe Game 등 questions 배열이 있는 게임용) -- */
+const questionsOverlay = document.getElementById('questionsOverlay');
+const questionsEyebrow = document.getElementById('questionsEyebrow');
+const questionsTitle = document.getElementById('questionsTitle');
+const questionDisplay = document.getElementById('questionDisplay');
+const questionCounter = document.getElementById('questionCounter');
+const questionPrevBtn = document.getElementById('questionPrevBtn');
+const questionNextBtn = document.getElementById('questionNextBtn');
+const questionsBackBtn = document.getElementById('questionsBackBtn');
+
+let currentQuestions = [];
+let questionIndex = 0;
+
+function renderQuestion(){
+  const total = currentQuestions.length;
   if(total === 0){
-    gameQuestionDisplay.innerHTML = `<div class="caption-empty">아직 질문이 없습니다<br>No questions yet</div>`;
-    gameCounter.textContent = '0 / 0';
-    gamePrevBtn.disabled = true;
-    gameNextBtn.disabled = true;
+    questionDisplay.innerHTML = `<div class="caption-empty">아직 질문이 없습니다<br>No questions yet</div>`;
+    questionCounter.textContent = '0 / 0';
+    questionPrevBtn.disabled = true;
+    questionNextBtn.disabled = true;
     return;
   }
-  if(gameIndex < 0) gameIndex = 0;
-  if(gameIndex > total - 1) gameIndex = total - 1;
+  if(questionIndex < 0) questionIndex = 0;
+  if(questionIndex > total - 1) questionIndex = total - 1;
 
-  gameQuestionDisplay.innerHTML = `<div class="lang-text" style="text-align:center; font-size:16px; line-height:1.7;">${escapeHtml(GAME_QUESTIONS[gameIndex])}</div>`;
-  gameCounter.textContent = `${gameIndex + 1} / ${total}`;
-  gamePrevBtn.disabled = gameIndex === 0;
-  gameNextBtn.disabled = gameIndex === total - 1;
+  questionDisplay.innerHTML = `
+    <div class="lang-block mini"><span class="lang-tag">한국어</span><div class="lang-text">${escapeHtml(currentQuestions[questionIndex].kr)}</div></div>
+    <div class="lang-block mini"><span class="lang-tag en">ENGLISH</span><div class="lang-text">${escapeHtml(currentQuestions[questionIndex].en)}</div></div>
+    <div class="lang-block mini"><span class="lang-tag zh">中文</span><div class="lang-text">${escapeHtml(currentQuestions[questionIndex].zh)}</div></div>
+  `;
+  questionCounter.textContent = `${questionIndex + 1} / ${total}`;
+  questionPrevBtn.disabled = questionIndex === 0;
+  questionNextBtn.disabled = questionIndex === total - 1;
 }
 
-gamePrevBtn.addEventListener('click', () => { gameIndex--; renderGameQuestion(); });
-gameNextBtn.addEventListener('click', () => { gameIndex++; renderGameQuestion(); });
-
-function closeGameEditWrap(){
-  gameEditWrap.style.display = 'none';
-  gameViewWrap.style.display = 'block';
-  gameEditToggleBtn.textContent = '수정하기 · Edit';
-  hasUnsavedChanges = false;
+function openQuestionsOverlay(g){
+  currentQuestions = g.questions || [];
+  questionIndex = 0;
+  questionsEyebrow.textContent = `${String(g.num).padStart(2,'0')} · ${g.titleKr} · ${g.titleZh}`;
+  questionsTitle.textContent = 'Questions';
+  renderQuestion();
+  questionsOverlay.classList.add('open');
 }
 
-function fillGameEditArea(){
-  gameEditArea.value = GAME_QUESTIONS.join('\n');
-}
+questionPrevBtn.addEventListener('click', () => { questionIndex--; renderQuestion(); });
+questionNextBtn.addEventListener('click', () => { questionIndex++; renderQuestion(); });
 
-// -- 프로토타입 전용: 수정하기 버튼 -- 이전에 저장된 질문을 그대로 불러와 그 자리에서 바로 수정 --
-gameEditToggleBtn.addEventListener('click', () => {
-  const isOpen = gameEditWrap.style.display !== 'none';
-  if(isOpen){
-    closeGameEditWrap();
-  } else {
-    fillGameEditArea();
-    gameViewWrap.style.display = 'none';
-    gameEditWrap.style.display = 'block';
-    gameEditToggleBtn.textContent = '닫기 · Close';
-  }
+questionsBackBtn.addEventListener('click', () => {
+  // 뒤로 가면 질문 화면만 닫히고, 그 아래의 게임 안내 시트로 돌아감
+  questionsOverlay.classList.remove('open');
 });
-
-gameEditArea.addEventListener('input', () => { hasUnsavedChanges = true; });
-
-// -- 프로토타입 전용: 저장 버튼 (확정되면 이 블록과 위 textarea/버튼 삭제) --
-gameSaveBtn.addEventListener('click', () => {
-  const lines = gameEditArea.value.split('\n').map(s => s.trim()).filter(s => s.length > 0);
-  GAME_QUESTIONS = lines;
-  try{
-    localStorage.setItem('game-questions', JSON.stringify(lines));
-  }catch(e){ /* ignore */ }
-  gameIndex = 0;
-  renderGameQuestion();
-  closeGameEditWrap();
-  gameSaveStatus.textContent = '저장되었습니다 · Saved';
-  setTimeout(() => { gameSaveStatus.textContent = ''; }, 2000);
+questionsOverlay.addEventListener('click', e => {
+  if(e.target === questionsOverlay) questionsOverlay.classList.remove('open');
 });
-
-renderGameQuestion();
-closeGameEditWrap();
 
 /* =================================================================
    SEATING (좌석 찾기) — 기존 로직 그대로
