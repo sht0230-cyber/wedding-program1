@@ -1441,12 +1441,23 @@ const GAMES = [
     // 아래 질문은 예시입니다. 실제 질문이 정해지면 이 목록만 바꿔주세요.
     // These are placeholder questions — just edit this list once the real ones are decided.
     questions: [
-      { kr: "누가 첫눈에 반했을까요?", en: "Who fell in love at first sight?", zh: "谁对谁一见钟情？" },
-      { kr: "잠버릇이 더 심한 사람은 누구일까요?", en: "Who has worse sleeping habits?", zh: "谁的睡觉习惯更差？" },
-      { kr: "돈 관리를 더 잘하는 사람은 누구일까요?", en: "Who manages money better?", zh: "谁更擅长理财？" },
-      { kr: "집안일을 더 많이 하는 사람은 누구일까요?", en: "Who does more housework?", zh: "谁做更多家务？" },
-      { kr: "먼저 사과하는 사람은 누구일까요?", en: "Who apologizes first after a fight?", zh: "吵架后谁先道歉？" },
-      { kr: "10년 후 더 많이 변할 사람은 누구일까요?", en: "Who will change more in 10 years?", zh: "十年后谁的变化会更大？" }
+      { kr: "누가 먼저 다가갔을까요?", en: "Who made the first move?", zh: "谁先采取了行动？" },
+      { kr: "누가 먼저 \"사랑해\"라고 말했을까요?", en: "Who said \"I love you\" first?", zh: "谁先说\"我爱你\"？" },
+      { kr: "요리를 더 잘하는 사람은 누구일까요?", en: "Who is the better cook?", zh: "谁的厨艺更好？" },
+      { kr: "요리 대신 배달 음식을 더 많이 시킬 사람은 누구일까요?", en: "Who is more likely to order takeaway instead of cooking?", zh: "谁更可能点外卖而不是做饭？" },
+      { kr: "더 깔끔한 사람은 누구일까요?", en: "Who is the cleaner one?", zh: "谁更爱干净？" },
+      { kr: "패션 센스가 더 좋은 사람은 누구일까요?", en: "Who has the better sense of style?", zh: "谁的时尚品味更好？" },
+      { kr: "준비하는 데 시간이 더 오래 걸리는 사람은 누구일까요?", en: "Who takes longer to get ready?", zh: "谁准备的时间更长？" },
+      { kr: "더 감정 기복이 심한(드라마틱한) 사람은 누구일까요?", en: "Who is more dramatic?", zh: "谁更戏剧化？" },
+      { kr: "휴대폰을 더 잘 잃어버릴 사람은 누구일까요?", en: "Who is more likely to lose their phone?", zh: "谁更可能弄丢手机？" },
+      { kr: "다툰 후 먼저 사과하는 사람은 누구일까요?", en: "Who is the first to apologise after an argument?", zh: "吵架后谁先道歉？" },
+      { kr: "좀비 아포칼립스에서 더 오래 살아남을 사람은 누구일까요?", en: "Who is more likely to survive a zombie apocalypse?", zh: "谁更可能在僵尸末日中生存下来？" },
+      { kr: "자기가 한 농담에 스스로 더 잘 웃을 사람은 누구일까요?", en: "Who is more likely to laugh at their own joke?", zh: "谁更可能被自己的笑话逗笑？" },
+      { kr: "슬픈 영화를 볼 때 더 잘 울 사람은 누구일까요?", en: "Who is more likely to cry during a sad movie?", zh: "谁看伤感电影时更容易哭？" },
+      { kr: "더 로맨틱한 사람은 누구일까요?", en: "Who is more romantic?", zh: "谁更浪漫？" },
+      { kr: "상대방을 더 잘 위로해줄 사람은 누구일까요?", en: "Who is better at cheering the other person up?", zh: "谁更擅长安慰对方？" },
+      { kr: "다음 모험(여행)을 계획할 가능성이 더 높은 사람은 누구일까요?", en: "Who is more likely to plan the next adventure?", zh: "谁更可能计划下一次冒险？" },
+      { kr: "이 결혼에서 더 이득을 본 사람은 누구일까요?", en: "Who got the better deal in the marriage?", zh: "谁在这段婚姻中占了更大的便宜？" }
     ]
   },
   {
@@ -1460,6 +1471,21 @@ const GAMES = [
       { kr: "찾은 물건을 최대한 빨리 앞으로 가져옵니다.", en: "Bring it to the front as quickly as you can.", zh: "尽快把物品带到前面。" },
       { kr: "매 라운드마다 가장 늦게 돌아온 사람이 탈락합니다.", en: "The last person back each round is eliminated.", zh: "每一轮最后回来的人将被淘汰。" },
       { kr: "물건을 빌리기 전에 반드시 허락을 구해주세요.", en: "Please ask permission before borrowing any item.", zh: "借用物品前请务必先征得同意。" }
+    ],
+    // 라운드별로 가져와야 하는 물건 목록입니다. Next 버튼으로 하나씩 넘겨볼 수 있어요.
+    // The list of items to bring each round — tap Next to reveal them one at a time.
+    questionsBtnLabel: "가져올 물건 보기 · View Items to Bring",
+    questionsTitle: "Bring Me List",
+    questions: [
+      { kr: "🧥 자켓 / 블레이저", en: "🧥 Jacket / Blazer", zh: "🧥 夹克 / 西装外套" },
+      { kr: "👖 벨트", en: "👖 Belt", zh: "👖 皮带" },
+      { kr: "👞 신발", en: "👞 Shoes", zh: "👞 鞋子" },
+      { kr: "⌚ 시계", en: "⌚ Watch", zh: "⌚ 手表" },
+      { kr: "👓 안경 / 선글라스", en: "👓 Glasses / Sunglasses", zh: "👓 眼镜 / 太阳镜" },
+      { kr: "💄 립스틱", en: "💄 Lipstick", zh: "💄 口红" },
+      { kr: "📱 화면이 깨진 휴대폰", en: "📱 Phone with a cracked screen", zh: "📱 屏幕破裂的手机" },
+      { kr: "🚗 운전면허증", en: "🚗 Driver's licence", zh: "🚗 驾驶执照" },
+      { kr: "💵 20달러 지폐 (파이널 라운드)", en: "💵 $20 note (Final Round)", zh: "💵 20美元纸币（决赛轮）" }
     ]
   },
   {
@@ -1521,6 +1547,7 @@ function openGameSheet(g){
 
   if(g.questions && g.questions.length){
     gameSheetQuestionsWrap.style.display = 'block';
+    gameSheetQuestionsBtn.textContent = g.questionsBtnLabel || '질문 보기 · View Questions';
     gameSheetQuestionsBtn.onclick = () => openQuestionsOverlay(g);
   } else {
     gameSheetQuestionsWrap.style.display = 'none';
@@ -1578,7 +1605,7 @@ function openQuestionsOverlay(g){
   currentQuestions = g.questions || [];
   questionIndex = 0;
   questionsEyebrow.textContent = `${String(g.num).padStart(2,'0')} · ${g.titleKr} · ${g.titleZh}`;
-  questionsTitle.textContent = 'Questions';
+  questionsTitle.textContent = g.questionsTitle || 'Questions';
   renderQuestion();
   questionsOverlay.classList.add('open');
 }
